@@ -1,0 +1,27 @@
+// Copyright © SixtyFPS GmbH <info@slint.dev>
+// SPDX-License-Identifier: MIT
+
+import { CheckBox, StandardListView, StyleMetrics } from "std-widgets.slint";
+// import { AboutPage, ControlsPage, ListViewPage, TableViewPage, TableViewPageAdapter, TextEditPage } from "ui/pages/pages.slint";
+// import { GallerySettings } from "ui/gallery_settings.slint";
+import { SideBar } from "ui/side_bar.slint";
+import { QueryPage,TableView,Action } from "ui/pages/query.slint";
+export {TableView}
+
+export component App inherits Window {
+    preferred-width: 700px;
+    preferred-height: 500px;
+    title: @tr("Slint_Tools");
+    HorizontalLayout {
+        side-bar := SideBar {
+            title: @tr("功能选择");
+            model: [@tr("Menu" => "查询"), @tr("Menu" => "绑定"), @tr("Menu" => "工单"), @tr("Menu" => "TextEdit"), @tr("Menu" => "About")];
+        }
+
+        if(side-bar.current-item == 0) : QueryPage {}
+        // if(side-bar.current-item == 1) : ListViewPage {}
+        // if(side-bar.current-item == 2) : TableViewPage {}
+        // if(side-bar.current-item == 3) : TextEditPage {}
+        // if(side-bar.current-item == 4) : AboutPage {}
+    }
+}
