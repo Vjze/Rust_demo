@@ -1,14 +1,11 @@
-// Copyright © SixtyFPS GmbH <info@slint.dev>
-// SPDX-License-Identifier: MIT
-
-import { StyleMetrics } from "std-widgets.slint";
-
+import { StyleMetrics,Switch } from "std-widgets.slint";
+import { DateTime } from "pages/datetime.slint";
 component SideBarItem inherits Rectangle {
     callback clicked <=> touch.clicked;
     in-out property<string> text <=> label.text;
     in property<bool> selected;
     in property<bool> has-focus;
-
+    out property <color> main-background: #0E133F;
     min-height: l.preferred-height;
 
     state := Rectangle {
@@ -21,11 +18,13 @@ component SideBarItem inherits Rectangle {
     l := HorizontalLayout {
         y: (parent.height - self.height) / 2;
         padding: StyleMetrics.layout-padding;
-        spacing: 0px;
+        spacing: 15px;
 
         label := Text {
             color: StyleMetrics.default-text-color;
             vertical-alignment: center;
+            horizontal-alignment: center;
+            font-size: 15px;
          }
     }
 
@@ -103,8 +102,10 @@ export component SideBar inherits Rectangle {
         alignment: start;
 
         label := Text {
-            font-size: 16px;
+            font-size: 25px;
             horizontal-alignment: center;
+            vertical-alignment: center;
+            height: 45px;
         }
 
         navigation := VerticalLayout {
@@ -118,13 +119,13 @@ export component SideBar inherits Rectangle {
             }
         }
 
-        VerticalLayout {
-            bottom := VerticalLayout {
-                padding-left: StyleMetrics.layout-padding;
-                padding-right: StyleMetrics.layout-padding;
 
-                @children
-             }
-        }
+        
+        
+    }
+    VerticalLayout {
+       
+        DateTime { }
+        padding-bottom: 50px;
     }
 }

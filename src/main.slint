@@ -1,42 +1,11 @@
-// Copyright © SixtyFPS GmbH <info@slint.dev>
-// SPDX-License-Identifier: MIT
 
-import { CheckBox, StandardListView, StyleMetrics,VerticalBox,TabWidget } from "std-widgets.slint";
-// import { AboutPage, ControlsPage, ListViewPage, TableViewPage, TableViewPageAdapter, TextEditPage } from "ui/pages/pages.slint";
-// import { GallerySettings } from "ui/gallery_settings.slint";
-import { SideBar } from "ui/side_bar.slint";
-import { QueryPage,Action,Infos_Box,Infos_Sn,InfosData } from "ui/pages/query.slint";
-export { QueryPage,Action,Infos_Box,Infos_Sn,InfosData}
+import { SideBar} from "ui/side_bar.slint";
+import { QueryPage,Action,Infos_Box,Infos_Sn,InfosData,DateTimeAdapter } from "ui/pages/query.slint";
+export { QueryPage,Action,Infos_Box,Infos_Sn,InfosData,DateTimeAdapter}
 export component App inherits Window {
     preferred-width: 1600px;
     preferred-height: 900px;
     title: @tr("Slint_Tools");
-    // VerticalBox {
-    //     TabWidget {
-    //         // hide the widgets from the tab focus handler when covered:
-    //         // visible: !(root.is-building || root.build-pane-visible);
-
-    //         Tab {
-    //             title: "查询功能";
-    //             cargo-view := QueryPage {
-    //                 // background: root.background;
-    //             }
-    //         }
-
-    //         Tab {
-    //             title: "Todo";
-    //             // CargoInstallView { }
-    //         }
-
-    //         Tab {
-    //             title: "Todo";
-    //             // rustup-view := RustupView {
-    //             //     width: 100%;
-    //             //     height: 100%;
-    //             // }
-    //         }
-    //     }
-    // }
     HorizontalLayout {
         side-bar := SideBar {
             title: @tr("功能选择");

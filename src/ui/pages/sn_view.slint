@@ -1,6 +1,5 @@
+import { Button, GroupBox,  ComboBox, CheckBox, LineEdit,ListView} from "std-widgets.slint";
 
-import { Button, GroupBox, SpinBox, ComboBox, CheckBox, LineEdit, TabWidget, VerticalBox, HorizontalBox,
-    ListView, StandardTableView, ScrollView , GridBox,StyleMetrics} from "std-widgets.slint";
 export struct Action  {
     type: string,
     text: string,
@@ -42,8 +41,9 @@ export global InfosData {
 
 export component QueryPage inherits GridLayout {
    
-    VerticalBox {
+    VerticalLayout {
         HorizontalLayout {
+            height: 50px;
             alignment: start;
             spacing :20px;
             text-edit :=LineEdit {
@@ -52,7 +52,8 @@ export component QueryPage inherits GridLayout {
                     query.clicked();
                 }
                 horizontal-alignment:left;
-                width: 500px;
+                width: 350px;
+                
                 
             }
             
@@ -126,9 +127,9 @@ export component QueryPage inherits GridLayout {
             }
         }
             
-        ScrollView {
+        ListView {
             height: 800px;
-            for data in InfosData.datas_sn: HorizontalBox {
+            for data in InfosData.datas_sn: HorizontalLayout {
                     Text {
                         text: {data.sn};
                         horizontal-alignment: center;
@@ -208,7 +209,7 @@ export component QueryPage inherits GridLayout {
     
 
         if mode-cb.current-index == 1 :VerticalLayout{
-        HorizontalBox {
+        HorizontalLayout {
                         for da in [
                             {text: @tr("盒号")},
                             {text: @tr("SN")},
@@ -224,9 +225,9 @@ export component QueryPage inherits GridLayout {
                                 }
                             
                     }
-        ScrollView {
+        ListView {
             height: 800px;
-            for data in InfosData.datas_box: HorizontalBox {
+            for data in InfosData.datas_box: HorizontalLayout {
                     Text {
                         text: {data.box-sn};
                         horizontal-alignment: center;
