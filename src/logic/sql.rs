@@ -1,130 +1,220 @@
-use std::rc::Rc;
 
-use super::util::{sn_client,client,client_1,client_2};
+use crate::logic::util::{client,sn_client};
+use crate::generated_code::{Infos_Box,Infos_Sn};
 // use ::chrono::Local;
-use slint::{StandardListViewItem, VecModel};
 use tiberius::time::chrono;
 // use uuid::Uuid;
 
-pub async fn sn_work(s: String) -> Rc<VecModel<slint::ModelRc<StandardListViewItem>>> {
-    let row_data: Rc<VecModel<slint::ModelRc<StandardListViewItem>>> = Rc::new(VecModel::default());
+pub async fn sn_work(s: String) -> (Vec<Infos_Sn>,usize) {
+    let mut row_data = Vec::new();
     let mut client = sn_client().await;
     let query_ty = format!("where SN = '{}'", s);
     let testtype = "SN,ProductBill,TestType,Result,Ith,Pf,Vop,Im,Rs,Sen,Res,ICC,Idark,Vbr,IXtalk,Kink,TestDate";
     let testtype_12 = "SN,ProductBill,TestType,Result,Ith,Po,Vf,Im,Rs,Sen,Res,ICC,Idark,Vbr,Xtalk,Kink_I,TestDate";
     let stream  = client.query(format!("
-    SELECT {3} FROM {1}MAC_10GBOSADATA  {0} UNION all SELECT {4} FROM {2}MAC_f07959df8122  {0} 
-    UNION all SELECT {4} FROM {2}MAC_00e04c686dd1  {0}  UNION all SELECT {4} FROM {2}MAC_00e04c3105fb  {0} 
-    UNION all SELECT {4} FROM {2}MAC_70e400a2c0d4  {0}  UNION all SELECT {4} FROM {2}MAC_00262da5e778  {0} 
-    UNION all SELECT {4} FROM {2}MAC_408d5cb2d04a  {0}  UNION all SELECT {4} FROM {2}MAC_408d5cb712a3  {0} 
-    UNION all SELECT {4} FROM {2}MAC_408d5cb72176  {0}  UNION all SELECT {4} FROM {2}MAC_10634b007c4b  {0} 
-    UNION all SELECT {4} FROM {2}MAC_10634b0966f0  {0}  UNION all SELECT {4} FROM {2}MAC_08626683922a  {0} 
-    UNION all SELECT {4} FROM {2}MAC_c8e7d8e187a7  {0}  UNION all SELECT {4} FROM {2}MAC_f0b42937e924  {0} 
-    UNION all SELECT {4} FROM {2}MAC_fcaa14afca45  {0}  UNION all SELECT {4} FROM {2}MAC_F07959DF968E  {0} 
-    UNION all SELECT {4} FROM {2}MAC_f07959df9218  {0}  UNION all SELECT {4} FROM {2}MAC_f07959df9694  {0} 
+    SELECT {3} FROM {1}MAC_10GBOSADATA  {0} UNION all SELECT {4} FROM {2}MAC_f07959df8122  {0}
+    UNION all SELECT {4} FROM {2}MAC_00e04c686dd1  {0}  UNION all SELECT {4} FROM {2}MAC_00e04c3105fb  {0}
+    UNION all SELECT {4} FROM {2}MAC_70e400a2c0d4  {0}  UNION all SELECT {4} FROM {2}MAC_00262da5e778  {0}
+    UNION all SELECT {4} FROM {2}MAC_408d5cb2d04a  {0}  UNION all SELECT {4} FROM {2}MAC_408d5cb712a3  {0}
+    UNION all SELECT {4} FROM {2}MAC_408d5cb72176  {0}  UNION all SELECT {4} FROM {2}MAC_10634b007c4b  {0}
+    UNION all SELECT {4} FROM {2}MAC_10634b0966f0  {0}  UNION all SELECT {4} FROM {2}MAC_08626683922a  {0}
+    UNION all SELECT {4} FROM {2}MAC_c8e7d8e187a7  {0}  UNION all SELECT {4} FROM {2}MAC_f0b42937e924  {0}
+    UNION all SELECT {4} FROM {2}MAC_fcaa14afca45  {0}  UNION all SELECT {4} FROM {2}MAC_F07959DF968E  {0}
+    UNION all SELECT {4} FROM {2}MAC_f07959df9218  {0}  UNION all SELECT {4} FROM {2}MAC_f07959df9694  {0}
     UNION all SELECT {4} FROM {2}MAC_f07959dfa742  {0}  UNION all SELECT {4} FROM {2}MAC_fcaa14db2983  {0}  ",
-    query_ty,"BOSAautotest_Data.dbo.","BOSAautotestDB.dbo.",testtype,testtype_12),&[&1i32]).await.unwrap();
+                                       query_ty,"BOSAautotest_Data.dbo.","BOSAautotestDB.dbo.",testtype,testtype_12),&[&1i32]).await.unwrap();
     let rowsets = stream.into_results().await.unwrap();
     for i in 0..rowsets.len() {
         let rows = rowsets.get(i).unwrap();
         for row in rows {
-            // let mut v: Vec<String> = vec![];
-            let items = Rc::new(VecModel::default());
-            let sn = StandardListViewItem::from(slint::format!(
+            let sn = slint::format!(
                 "{}",
                 (row.get::<&str, _>(0).unwrap_or("?"))
-            ));
-            let workid = StandardListViewItem::from(slint::format!(
+            );
+            let workid = slint::format!(
                 "{}",
                 (row.get::<&str, _>(1).unwrap_or("?"))
-            ));
-            let pn = StandardListViewItem::from(slint::format!(
+            );
+            let pn = slint::format!(
                 "{}",
                 (row.get::<&str, _>(2).unwrap_or("?"))
-            ));
-            let result = StandardListViewItem::from(slint::format!(
+            );
+            let result = slint::format!(
                 "{}",
                 (row.get::<&str, _>(3).unwrap_or("?"))
-            ));
-            let ith = StandardListViewItem::from(slint::format!(
+            );
+            let ith = slint::format!(
                 "{}",
                 (row.get::<&str, _>(4).unwrap_or("?"))
-            ));
-            let pf = StandardListViewItem::from(slint::format!(
+            );
+            let pf = slint::format!(
                 "{}",
                 (row.get::<&str, _>(5).unwrap_or("?"))
-            ));
-            let vop = StandardListViewItem::from(slint::format!(
+            );
+            let vop = slint::format!(
                 "{}",
                 (row.get::<&str, _>(6).unwrap_or("?"))
-            ));
-            let im = StandardListViewItem::from(slint::format!(
+            );
+            let im = slint::format!(
                 "{}",
                 (row.get::<&str, _>(7).unwrap_or("?"))
-            ));
-            let rs = StandardListViewItem::from(slint::format!(
+            );
+            let rs = slint::format!(
                 "{}",
                 (row.get::<&str, _>(8).unwrap_or("?"))
-            ));
-            let sen = StandardListViewItem::from(slint::format!(
+            );
+            let sen = slint::format!(
                 "{}",
                 (row.get::<&str, _>(9).unwrap_or("?"))
-            ));
-            let res = StandardListViewItem::from(slint::format!(
+            );
+            let res = slint::format!(
                 "{}",
                 (row.get::<&str, _>(10).unwrap_or("?"))
-            ));
-            let icc = StandardListViewItem::from(slint::format!(
+            );
+            let icc = slint::format!(
                 "{}",
                 (row.get::<&str, _>(11).unwrap_or("?"))
-            ));
-            let idark = StandardListViewItem::from(slint::format!(
+            );
+            let idark = slint::format!(
                 "{}",
                 (row.get::<&str, _>(12).unwrap_or("?"))
-            ));
-            let vbr = StandardListViewItem::from(slint::format!(
+            );
+            let vbr = slint::format!(
                 "{}",
                 (row.get::<&str, _>(13).unwrap_or("?"))
-            ));
-            let ixtalk = StandardListViewItem::from(slint::format!(
+            );
+            let ixtalk = slint::format!(
                 "{}",
                 (row.get::<&str, _>(14).unwrap_or("?"))
-            ));
-            let kink = StandardListViewItem::from(slint::format!(
+            );
+            let kink = slint::format!(
                 "{}",
                 (row.get::<&str, _>(15).unwrap_or("?"))
-            ));
-            let datatime = StandardListViewItem::from(slint::format!(
+            );
+            let datatime = slint::format!(
                 "{}",
-                (row.get::<chrono::NaiveDateTime, _>(16).unwrap().format("%Y/%m/%d %H:%M:%S"))
-            ));
-            items.push(sn);
-            items.push(workid);
-            items.push(pn);
-            items.push(result);
-            items.push(ith);
-            items.push(pf);
-            items.push(vop);
-            items.push(im);
-            items.push(rs);
-            items.push(sen);
-            items.push(res);
-            items.push(icc);
-            items.push(idark);
-            items.push(vbr);
-            items.push(ixtalk);
-            items.push(kink);
-            items.push(datatime);
-            row_data.push(items.into());
+                (row.get::<chrono::NaiveDateTime, _>(16)
+                    .unwrap()
+                    .format("%Y/%m/%d %H:%M:%S"))
+            );
+            row_data.push(Infos_Sn{
+                sn,
+                productBill: workid,
+                testType: pn,
+                result: result,
+                ith,
+                pf,
+                vop,
+                im,
+                rs,
+                sen,
+                res,
+                icc,
+                idark,
+                vbr,
+                ixtalk,
+                kink,
+                testdate:datatime,
+            });
+            
         }
     }
-    row_data
+    let m = row_data.len();
+    (row_data,m)
 }
-// pub async fn box_none_work(d1: String, d2: String) -> (Vec<Vec<String>>, usize) {
+// // pub async fn box_none_work(d1: String, d2: String) -> (Vec<Vec<String>>, usize) {
+// //     let mut client = client().await;
+// //     let query_ty = format!(
+// //         "where CreateTime Between '{}' and '{}' ORDER BY [CreateTime] DESC OFFSET 0 ROWS ",
+// //         d1, d2
+// //     );
+// //     let testtype_none = "Pack_no,Sn,PN,WorkOrder,Creator,CreateTime";
+// //     let stream = client
+// //         .query(
+// //             format!(
+// //                 "select {0} from MaterialPackSn {1} ",
+// //                 testtype_none, query_ty
+// //             ),
+// //             &[&1i32],
+// //         )
+// //         .await
+// //         .unwrap();
+// //     let rowsets = stream.into_results().await.unwrap();
+// //     let mut rv: Vec<Vec<String>> = vec![];
+// //     //let no:Vec<String> = vec![];
+// //     for i in 0..rowsets.len() {
+// //         let rows = rowsets.get(i).unwrap();
+// //         for row in rows {
+// //             let mut v: Vec<String> = vec![];
+// //             v.push(row.get::<&str, _>(0).unwrap().to_string());
+// //             v.push(row.get::<&str, _>(1).unwrap().to_string());
+// //             v.push(row.get::<&str, _>(2).unwrap().to_string());
+// //             v.push(row.get::<&str, _>(3).unwrap().to_string());
+// //             v.push(row.get::<&str, _>(4).unwrap().to_string());
+// //             v.push(row.get::<chrono::NaiveDateTime, _>(5).unwrap().to_string());
+// //             rv.insert(i, v)
+// //         }
+// //     }
+// //     let quantity = rv.len();
+// //     (rv, quantity)
+// // }
+
+
+
+pub async fn box_work(s:String) -> (Vec<Infos_Box>,usize) {
+    let  mut row_data = Vec::new();
+    let mut client = client().await;
+        let query_ty = format!(
+            "where Pack_no = '{}' ORDER BY [CreateTime] DESC OFFSET 0 ROWS ",
+            s
+        );
+        let testtype_none = "Pack_no,Sn,PN,WorkOrder,Creator,CreateTime";
+        let stream = client
+            .query(
+                format!(
+                    "select {0} from MaterialPackSn {1} ",
+                    testtype_none, query_ty
+                ),
+                &[&1i32],
+            )
+            .await
+            .unwrap();
+        let rowsets = stream.into_results().await.unwrap();
+        for i in 0..rowsets.len() {
+            let rows = rowsets.get(i).unwrap();
+            for row in rows {
+                let box_no = slint::format!("{}", (row.get::<&str, _>(0).unwrap_or("?")));
+                let sn = slint::format!("{}", (row.get::<&str, _>(1).unwrap_or("?")));
+                let pn = slint::format!("{}", (row.get::<&str, _>(2).unwrap_or("?")));
+                let order = slint::format!("{}", (row.get::<&str, _>(3).unwrap_or("?")));
+                let worderid = slint::format!("{}", (row.get::<&str, _>(4).unwrap_or("?")));
+                let datatime = slint::format!(
+                    "{}",
+                    (row.get::<chrono::NaiveDateTime, _>(5)
+                        .unwrap()
+                        .format("%Y/%m/%d %H:%M:%S"))
+                );
+                row_data.push(Infos_Box {
+                    box_sn: box_no.clone(),
+                    sn:sn.clone(),
+                    pn:pn.clone(),
+                    order:order.clone(),
+                    workerid: worderid.clone(),
+                    date: datatime.clone(),
+                });
+            }
+        }
+
+    let quantity = row_data.len();
+    (row_data,quantity)
+}
+
+// pub async fn box_work(s: String) -> Rc<VecModel<slint::ModelRc<StandardListViewItem>>> {
+//     let row_data: Rc<VecModel<slint::ModelRc<StandardListViewItem>>> = Rc::new(VecModel::default());
 //     let mut client = client().await;
 //     let query_ty = format!(
-//         "where CreateTime Between '{}' and '{}' ORDER BY [CreateTime] DESC OFFSET 0 ROWS ",
-//         d1, d2
+//         "where Pack_no = '{}' ORDER BY [CreateTime] DESC OFFSET 0 ROWS ",
+//         s
 //     );
 //     let testtype_none = "Pack_no,Sn,PN,WorkOrder,Creator,CreateTime";
 //     let stream = client
@@ -138,83 +228,48 @@ pub async fn sn_work(s: String) -> Rc<VecModel<slint::ModelRc<StandardListViewIt
 //         .await
 //         .unwrap();
 //     let rowsets = stream.into_results().await.unwrap();
-//     let mut rv: Vec<Vec<String>> = vec![];
-//     //let no:Vec<String> = vec![];
 //     for i in 0..rowsets.len() {
 //         let rows = rowsets.get(i).unwrap();
 //         for row in rows {
-//             let mut v: Vec<String> = vec![];
-//             v.push(row.get::<&str, _>(0).unwrap().to_string());
-//             v.push(row.get::<&str, _>(1).unwrap().to_string());
-//             v.push(row.get::<&str, _>(2).unwrap().to_string());
-//             v.push(row.get::<&str, _>(3).unwrap().to_string());
-//             v.push(row.get::<&str, _>(4).unwrap().to_string());
-//             v.push(row.get::<chrono::NaiveDateTime, _>(5).unwrap().to_string());
-//             rv.insert(i, v)
+//             let items = Rc::new(VecModel::default());
+//             let box_no = slint::format!(
+//                 "{}",
+//                 (row.get::<&str, _>(0).unwrap_or("?"))
+//             ));
+//             let sn = slint::format!(
+//                 "{}",
+//                 (row.get::<&str, _>(1).unwrap_or("?"))
+//             ));
+//             let pn = slint::format!(
+//                 "{}",
+//                 (row.get::<&str, _>(2).unwrap_or("?"))
+//             ));
+//             let order = slint::format!(
+//                 "{}",
+//                 (row.get::<&str, _>(3).unwrap_or("?"))
+//             ));
+//             let worderid = slint::format!(
+//                 "{}",
+//                 (row.get::<&str, _>(3).unwrap_or("?"))
+//             ));
+//             let datatime = slint::format!(
+//                 "{}",
+//                 (row.get::<chrono::NaiveDateTime, _>(5)
+//                     .unwrap()
+//                     .format("%Y/%m/%d %H:%M:%S"))
+//             ));
+//             items.push(box_no);
+//             items.push(sn);
+//             items.push(pn);
+//             items.push(order);
+//             items.push(worderid);
+//             items.push(datatime);
+//             row_data.push(items.into());
 //         }
 //     }
-//     let quantity = rv.len();
-//     (rv, quantity)
+//     // let quantity = rv.len();
+//     row_data
 // }
-pub async fn box_work(s: String) -> Rc<VecModel<slint::ModelRc<StandardListViewItem>>> {
-    let row_data: Rc<VecModel<slint::ModelRc<StandardListViewItem>>> = Rc::new(VecModel::default());
-    let mut client = client().await;
-    let query_ty = format!(
-        "where Pack_no = '{}' ORDER BY [CreateTime] DESC OFFSET 0 ROWS ",
-        s
-    );
-    let testtype_none = "Pack_no,Sn,PN,WorkOrder,Creator,CreateTime";
-    let stream = client
-        .query(
-            format!(
-                "select {0} from MaterialPackSn {1} ",
-                testtype_none, query_ty
-            ),
-            &[&1i32],
-        )
-        .await
-        .unwrap();
-    let rowsets = stream.into_results().await.unwrap();
-    for i in 0..rowsets.len() {
-        let rows = rowsets.get(i).unwrap();
-        for row in rows {
-            let items = Rc::new(VecModel::default());
-            let box_no = StandardListViewItem::from(slint::format!(
-                "{}",
-                (row.get::<&str, _>(0).unwrap_or("?"))
-            ));
-            let sn = StandardListViewItem::from(slint::format!(
-                "{}",
-                (row.get::<&str, _>(1).unwrap_or("?"))
-            ));
-            let pn = StandardListViewItem::from(slint::format!(
-                "{}",
-                (row.get::<&str, _>(2).unwrap_or("?"))
-            ));
-            let order = StandardListViewItem::from(slint::format!(
-                "{}",
-                (row.get::<&str, _>(3).unwrap_or("?"))
-            ));
-            let worderid = StandardListViewItem::from(slint::format!(
-                "{}",
-                (row.get::<&str, _>(3).unwrap_or("?"))
-            ));
-            let datatime = StandardListViewItem::from(slint::format!(
-                "{}",
-                (row.get::<chrono::NaiveDateTime, _>(5).unwrap().format("%Y/%m/%d %H:%M:%S"))
-            ));
-            items.push(box_no);
-            items.push(sn);
-            items.push(pn);
-            items.push(order);
-            items.push(worderid);
-            items.push(datatime);
-            row_data.push(items.into());
-        }
-    }
-    // let quantity = rv.len();
-    row_data
-}
 // pub async fn carton_none_work(d1: String, d2: String) -> (Vec<Vec<String>>, i32) {
 //     let mut client = client().await;
 //     let mut client_1 = client_1().await;
@@ -271,90 +326,78 @@ pub async fn box_work(s: String) -> Rc<VecModel<slint::ModelRc<StandardListViewI
 //     }
 //     (rv, sum)
 // }
-pub async fn carton_work(s: String) -> Rc<VecModel<slint::ModelRc<StandardListViewItem>>> {
-    let row_data: Rc<VecModel<slint::ModelRc<StandardListViewItem>>> = Rc::new(VecModel::default());
-    let mut client = client().await;
-    let mut client_1 = client_1().await;
-    let mut client_2 = client_2().await;
-    let car_no = s.clone();
-    let stream = client.query(format!("select a.sn from MaterialPackSn a inner join  packing_carton b on a.Pack_no=b.Packing_no where b.cartonno='{}' order by b.CreateTime  desc,b.Packing_no  desc,a.Pack_no asc",car_no), &[&1i32]).await.unwrap();
-    let rowsets = stream.into_results().await.unwrap();
-    //let mut box_m  = vec![];
-    // let mut rv: Vec<Vec<String>> = vec![];
-    let rows = rowsets.get(0).unwrap();
-    for (_i, row) in rows.iter().enumerate() {
-        let sn_s = row.get::<&str, _>(0).unwrap().to_string();
-        let stream_1 = client_1
-            .query(
-                format!("select Pack_no from MaterialPackSn where Sn ='{}'", sn_s),
-                &[&1i32],
-            )
-            .await
-            .unwrap();
-        let rowsets_1 = stream_1.into_row().await.unwrap().unwrap();
-        let box_s = rowsets_1.get::<&str, _>(0).unwrap().to_string();
+// pub async fn carton_work(s: String) -> Rc<VecModel<slint::ModelRc<StandardListViewItem>>> {
+//     let row_data: Rc<VecModel<slint::ModelRc<StandardListViewItem>>> = Rc::new(VecModel::default());
+//     let mut client = client().await;
+//     let mut client_1 = client_1().await;
+//     let mut client_2 = client_2().await;
+//     let car_no = s.clone();
+//     let stream = client.query(format!("select a.sn from MaterialPackSn a inner join  packing_carton b on a.Pack_no=b.Packing_no where b.cartonno='{}' order by b.CreateTime  desc,b.Packing_no  desc,a.Pack_no asc",car_no), &[&1i32]).await.unwrap();
+//     let rowsets = stream.into_results().await.unwrap();
+//     //let mut box_m  = vec![];
+//     // let mut rv: Vec<Vec<String>> = vec![];
+//     let rows = rowsets.get(0).unwrap();
+//     for (_i, row) in rows.iter().enumerate() {
+//         let sn_s = row.get::<&str, _>(0).unwrap().to_string();
+//         let stream_1 = client_1
+//             .query(
+//                 format!("select Pack_no from MaterialPackSn where Sn ='{}'", sn_s),
+//                 &[&1i32],
+//             )
+//             .await
+//             .unwrap();
+//         let rowsets_1 = stream_1.into_row().await.unwrap().unwrap();
+//         let box_s = rowsets_1.get::<&str, _>(0).unwrap().to_string();
 
-        let testtype_22 = "SN,Ith,SE,Po,Vf,Im,Sen";
-        let stream_2  = client_2.query(format!("select {} from PACK_TESTDATA_HYD WHERE SN ='{}' and pnoptionid='-100' and  testDataType= '初测'",testtype_22,sn_s),&[&1i32]).await.unwrap();
-        let row_2 = stream_2.into_row().await.unwrap().unwrap();
-        let car = s.clone();
-        let items = Rc::new(VecModel::default());
-        
-        let sn = StandardListViewItem::from(slint::format!(
-            "{}",
-            (row_2.get::<&str, _>(0).unwrap_or("?"))
-        ));
-        let ith = StandardListViewItem::from(slint::format!(
-            "{}",
-            (row_2.get::<&str, _>(1).unwrap_or("?"))
-        ));
-        let se = StandardListViewItem::from(slint::format!(
-            "{}",
-            (row_2.get::<&str, _>(2).unwrap_or("?"))
-        ));
-        let po = row_2.get::<&str, _>(3).unwrap().to_string();
-        let s_po = po.parse::<f64>().unwrap() / 1000.0;
-        let f_po = format!("{:.2}", s_po);
-        let po = StandardListViewItem::from(slint::format!(
-            "{}",
-            f_po
-        ));
-        let vf = StandardListViewItem::from(slint::format!(
-            "{}",
-            (row_2.get::<&str, _>(4).unwrap_or("?"))
-        ));
-        let im = StandardListViewItem::from(slint::format!(
-            "{}",
-            (row_2.get::<&str, _>(5).unwrap_or("?"))
-        ));
-        let sen = StandardListViewItem::from(slint::format!(
-            "{}",
-            (row_2.get::<&str, _>(6).unwrap_or("?"))
-        ));
-            items.push(sn);
-            items.push(StandardListViewItem::from(slint::format!(
-                "25℃")));
-            items.push(ith);
-            items.push(se);
-            items.push(po);
-            items.push(vf);
-            items.push(im);
-            items.push(sen);
-            items.push(StandardListViewItem::from(slint::format!(
-                "{}",
-                box_s
-            )));
-            items.push(StandardListViewItem::from(slint::format!(
-                "{}",
-                car
-            )));
-            row_data.push(items.into());
-        
-       
-    }
-    // let quantity = rv.len();
-    row_data
-}
+//         let testtype_22 = "SN,Ith,SE,Po,Vf,Im,Sen";
+//         let stream_2  = client_2.query(format!("select {} from PACK_TESTDATA_HYD WHERE SN ='{}' and pnoptionid='-100' and  testDataType= '初测'",testtype_22,sn_s),&[&1i32]).await.unwrap();
+//         let row_2 = stream_2.into_row().await.unwrap().unwrap();
+//         let car = s.clone();
+//         let items = Rc::new(VecModel::default());
+
+//         let sn = slint::format!(
+//             "{}",
+//             (row_2.get::<&str, _>(0).unwrap_or("?"))
+//         ));
+//         let ith = slint::format!(
+//             "{}",
+//             (row_2.get::<&str, _>(1).unwrap_or("?"))
+//         ));
+//         let se = slint::format!(
+//             "{}",
+//             (row_2.get::<&str, _>(2).unwrap_or("?"))
+//         ));
+//         let po = row_2.get::<&str, _>(3).unwrap().to_string();
+//         let s_po = po.parse::<f64>().unwrap() / 1000.0;
+//         let f_po = format!("{:.2}", s_po);
+//         let po = slint::format!("{}", f_po));
+//         let vf = slint::format!(
+//             "{}",
+//             (row_2.get::<&str, _>(4).unwrap_or("?"))
+//         ));
+//         let im = slint::format!(
+//             "{}",
+//             (row_2.get::<&str, _>(5).unwrap_or("?"))
+//         ));
+//         let sen = slint::format!(
+//             "{}",
+//             (row_2.get::<&str, _>(6).unwrap_or("?"))
+//         ));
+//         items.push(sn);
+//         items.push(StandardListViewItem::from(slint::format!("25℃")));
+//         items.push(ith);
+//         items.push(se);
+//         items.push(po);
+//         items.push(vf);
+//         items.push(im);
+//         items.push(sen);
+//         items.push(StandardListViewItem::from(slint::format!("{}", box_s)));
+//         items.push(StandardListViewItem::from(slint::format!("{}", car)));
+//         row_data.push(items.into());
+//     }
+//     // let quantity = rv.len();
+//     row_data
+// }
 
 // pub async fn multiple_sn_work(vec_sn: Vec<String>) -> Vec<Vec<String>> {
 //     let mut client = sn_client().await;
@@ -364,15 +407,15 @@ pub async fn carton_work(s: String) -> Rc<VecModel<slint::ModelRc<StandardListVi
 //         let testtype = "SN,ProductBill,TestType,Result,Ith,Pf,Vop,Im,Rs,Sen,Res,ICC,Idark,Vbr,IXtalk,Kink,TestDate";
 //         let testtype_12 = "SN,ProductBill,TestType,Result,Ith,Po,Vf,Im,Rs,Sen,Res,ICC,Idark,Vbr,Xtalk,Kink_I,TestDate";
 //         let stream  = client.query(format!("
-//         SELECT {3} FROM {1}MAC_10GBOSADATA  {0} UNION all SELECT {4} FROM {2}MAC_f07959df8122  {0} 
-//         UNION all SELECT {4} FROM {2}MAC_00e04c686dd1  {0}  UNION all SELECT {4} FROM {2}MAC_00e04c3105fb  {0} 
-//         UNION all SELECT {4} FROM {2}MAC_70e400a2c0d4  {0}  UNION all SELECT {4} FROM {2}MAC_00262da5e778  {0} 
-//         UNION all SELECT {4} FROM {2}MAC_408d5cb2d04a  {0}  UNION all SELECT {4} FROM {2}MAC_408d5cb712a3  {0} 
-//         UNION all SELECT {4} FROM {2}MAC_408d5cb72176  {0}  UNION all SELECT {4} FROM {2}MAC_10634b007c4b  {0} 
-//         UNION all SELECT {4} FROM {2}MAC_10634b0966f0  {0}  UNION all SELECT {4} FROM {2}MAC_08626683922a  {0} 
-//         UNION all SELECT {4} FROM {2}MAC_c8e7d8e187a7  {0}  UNION all SELECT {4} FROM {2}MAC_f0b42937e924  {0} 
-//         UNION all SELECT {4} FROM {2}MAC_fcaa14afca45  {0}  UNION all SELECT {4} FROM {2}MAC_F07959DF968E  {0} 
-//         UNION all SELECT {4} FROM {2}MAC_f07959df9218  {0}  UNION all SELECT {4} FROM {2}MAC_f07959df9694  {0} 
+//         SELECT {3} FROM {1}MAC_10GBOSADATA  {0} UNION all SELECT {4} FROM {2}MAC_f07959df8122  {0}
+//         UNION all SELECT {4} FROM {2}MAC_00e04c686dd1  {0}  UNION all SELECT {4} FROM {2}MAC_00e04c3105fb  {0}
+//         UNION all SELECT {4} FROM {2}MAC_70e400a2c0d4  {0}  UNION all SELECT {4} FROM {2}MAC_00262da5e778  {0}
+//         UNION all SELECT {4} FROM {2}MAC_408d5cb2d04a  {0}  UNION all SELECT {4} FROM {2}MAC_408d5cb712a3  {0}
+//         UNION all SELECT {4} FROM {2}MAC_408d5cb72176  {0}  UNION all SELECT {4} FROM {2}MAC_10634b007c4b  {0}
+//         UNION all SELECT {4} FROM {2}MAC_10634b0966f0  {0}  UNION all SELECT {4} FROM {2}MAC_08626683922a  {0}
+//         UNION all SELECT {4} FROM {2}MAC_c8e7d8e187a7  {0}  UNION all SELECT {4} FROM {2}MAC_f0b42937e924  {0}
+//         UNION all SELECT {4} FROM {2}MAC_fcaa14afca45  {0}  UNION all SELECT {4} FROM {2}MAC_F07959DF968E  {0}
+//         UNION all SELECT {4} FROM {2}MAC_f07959df9218  {0}  UNION all SELECT {4} FROM {2}MAC_f07959df9694  {0}
 //         UNION all SELECT {4} FROM {2}MAC_f07959dfa742  {0}  UNION all SELECT {4} FROM {2}MAC_fcaa14db2983  {0}  ",
 //         query_ty,"BOSAautotest_Data.dbo.","BOSAautotestDB.dbo.",testtype,testtype_12),&[&1i32]).await.unwrap();
 //         let rowsets = stream.into_results().await.unwrap();
@@ -466,15 +509,15 @@ pub async fn carton_work(s: String) -> Rc<VecModel<slint::ModelRc<StandardListVi
 //     let testtype = "SN,TestType,Result,Ith,Pf,Im,Sen,Res,ICC,Idark,Kink,TestDate";
 //     let testtype_12 = "SN,TestType,Result,Ith,Po,Im,Sen,Res,ICC,Idark,Kink_I,TestDate";
 //     let stream  = client.query(format!("
-//     SELECT {3} FROM {1}MAC_10GBOSADATA  {0} UNION all SELECT {4} FROM {2}MAC_f07959df8122  {0} 
-//     UNION all SELECT {4} FROM {2}MAC_00e04c686dd1  {0}  UNION all SELECT {4} FROM {2}MAC_00e04c3105fb  {0} 
-//     UNION all SELECT {4} FROM {2}MAC_70e400a2c0d4  {0}  UNION all SELECT {4} FROM {2}MAC_00262da5e778  {0} 
-//     UNION all SELECT {4} FROM {2}MAC_408d5cb2d04a  {0}  UNION all SELECT {4} FROM {2}MAC_408d5cb712a3  {0} 
-//     UNION all SELECT {4} FROM {2}MAC_408d5cb72176  {0}  UNION all SELECT {4} FROM {2}MAC_10634b007c4b  {0} 
-//     UNION all SELECT {4} FROM {2}MAC_10634b0966f0  {0}  UNION all SELECT {4} FROM {2}MAC_08626683922a  {0} 
-//     UNION all SELECT {4} FROM {2}MAC_c8e7d8e187a7  {0}  UNION all SELECT {4} FROM {2}MAC_f0b42937e924  {0} 
-//     UNION all SELECT {4} FROM {2}MAC_fcaa14afca45  {0}  UNION all SELECT {4} FROM {2}MAC_F07959DF968E  {0} 
-//     UNION all SELECT {4} FROM {2}MAC_f07959df9218  {0}  UNION all SELECT {4} FROM {2}MAC_f07959df9694  {0} 
+//     SELECT {3} FROM {1}MAC_10GBOSADATA  {0} UNION all SELECT {4} FROM {2}MAC_f07959df8122  {0}
+//     UNION all SELECT {4} FROM {2}MAC_00e04c686dd1  {0}  UNION all SELECT {4} FROM {2}MAC_00e04c3105fb  {0}
+//     UNION all SELECT {4} FROM {2}MAC_70e400a2c0d4  {0}  UNION all SELECT {4} FROM {2}MAC_00262da5e778  {0}
+//     UNION all SELECT {4} FROM {2}MAC_408d5cb2d04a  {0}  UNION all SELECT {4} FROM {2}MAC_408d5cb712a3  {0}
+//     UNION all SELECT {4} FROM {2}MAC_408d5cb72176  {0}  UNION all SELECT {4} FROM {2}MAC_10634b007c4b  {0}
+//     UNION all SELECT {4} FROM {2}MAC_10634b0966f0  {0}  UNION all SELECT {4} FROM {2}MAC_08626683922a  {0}
+//     UNION all SELECT {4} FROM {2}MAC_c8e7d8e187a7  {0}  UNION all SELECT {4} FROM {2}MAC_f0b42937e924  {0}
+//     UNION all SELECT {4} FROM {2}MAC_fcaa14afca45  {0}  UNION all SELECT {4} FROM {2}MAC_F07959DF968E  {0}
+//     UNION all SELECT {4} FROM {2}MAC_f07959df9218  {0}  UNION all SELECT {4} FROM {2}MAC_f07959df9694  {0}
 //     UNION all SELECT {4} FROM {2}MAC_f07959dfa742  {0}  UNION all SELECT {4} FROM {2}MAC_fcaa14db2983  {0}  ",
 //     query_ty,"BOSAautotest_Data.dbo.","BOSAautotestDB.dbo.",testtype,testtype_12),&[&1i32]).await.unwrap();
 //     let rowsets = stream.into_results().await.unwrap();
@@ -696,7 +739,29 @@ pub async fn carton_work(s: String) -> Rc<VecModel<slint::ModelRc<StandardListVi
 //     let t = insert(b_sn, w_sn).await;
 //     return t;
 // }
-
+// pub async fn insert_test() {
+//     let mut client = client().await;
+//     let insert_1 = "(Pack_no,Sn,PN,WorkOrder,Creator,CreateTime,Id)";
+//     let boxsn = "H012345678910";
+//     let sn = "HD0123456789101231";
+//     let pn = "30300085";
+//     let wo = "233345";
+//     let relationtime = Local::now().format("%Y/%m/%d %H:%M:%S").to_string();
+//     let user_no = "Y1002";
+//     let mut id = 10000;
+//     // let id = Uuid::new_v4().to_string().to_uppercase();
+//     for x in 0..=99999{
+//         println!("id = {}",id);
+//     let _stream = client
+//         .execute(
+//             format!(
+//                 "INSERT into MaterialPackSn {0} values ('{1}','{2}','{3}','{4}','{5}','{6}','{7}')",insert_1,boxsn,sn,pn,wo,user_no,relationtime,id),&[&1i32]
+//         )
+//         .await
+//         .unwrap();
+//         id += 1
+//     }
+// }
 // pub async fn insert(b_sn: String, w_sn: String) -> ((Vec<Vec<String>>, usize), Tip) {
 //     let mut client = client().await;
 //     let insert_1 = "(SN_ShipMent,SN,BoxNum,JobOrder,Status,Relationtime,userno,GUID)";
@@ -1097,7 +1162,7 @@ pub async fn carton_work(s: String) -> Rc<VecModel<slint::ModelRc<StandardListVi
 //         let _stream = client
 //             .execute(
 //                 format!(
-//                     "INSERT into Barcode_jobsn {0} values 
+//                     "INSERT into Barcode_jobsn {0} values
 //         ('{1}','{2}','{3}','{4}','{5}','{6}')",
 //                     sql, joborder, sn, prodorder_name, sn_type, strdate, uuid
 //                 ),
@@ -1131,7 +1196,7 @@ pub async fn carton_work(s: String) -> Rc<VecModel<slint::ModelRc<StandardListVi
 //     let sn_pn = pn.clone();
 //     let sql = "(joborder,sn,prodorder_name,IsMrb,Transfertime,UnderWork,used,DonePnOption_id,DoingPnOption_id,NextPnOption_id,Status,now,InTime,GUID,PN,QTY,SN_TYPE)";
 //     for sn in sn_v {
-//         let _stream  = client.execute(format!("INSERT into Barcode_status {0} values 
+//         let _stream  = client.execute(format!("INSERT into Barcode_status {0} values
 //         ('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}')",
 //         sql,joborder,sn,prodorder_name,is_mrb,createtime,under_work,used,done_pn_option_id,doing_pn_option_id,next_pn_option_id,status,now,strdate,guid_2,sn_pn,qty,sn_type
 //     ),&[&1i32]).await.unwrap();
