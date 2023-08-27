@@ -5,6 +5,7 @@ export { QueryPage,Action,Infos_Box,Infos_Sn,InfosData,DateTimeAdapter,Dia}
 export component App inherits Window {
     preferred-width: 1600px;
     preferred-height: 900px;
+    callback show_confirm_popup <=> dia.show_confirm_popup;
     title: @tr("Slint_Tools");
     HorizontalLayout {
         side-bar := SideBar {
@@ -18,4 +19,5 @@ export component App inherits Window {
         // if(side-bar.current-item == 3) : TextEditPage {}
         // if(side-bar.current-item == 4) : AboutPage {}
     }
+    dia := Dia {  }
 }

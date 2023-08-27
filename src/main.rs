@@ -8,15 +8,24 @@ fn main() {
     let _timer = datetime::setup(&app);
 
     app.global::<InfosData>().on_query({
+        let window = app.as_weak();
         let cargo_channel = cargo_worker.channel.clone();
         move |action| {
-            cargo_channel
+            if action.text.len() == 0 {
+                window.unwrap().invoke_show_confirm_popup();
+            }else {
+                cargo_channel
                 .send(get_result::QueryMessage::Action {
                     action,
                 })
                 .unwrap()
+            }
+            
         }
     });
+
+
+    
     
     app.run().unwrap();
     cargo_worker.join().unwrap();

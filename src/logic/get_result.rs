@@ -1,4 +1,4 @@
-use crate::generated_code::{App,Action,Infos_Box,Infos_Sn,InfosData,Example};
+use crate::generated_code::{App,Action,Infos_Box,Infos_Sn,InfosData};
 use crate::logic::sql::box_work;
 use futures::future::{Fuse, FutureExt};
 use slint::{ComponentHandle, Model, ModelRc, VecModel};
