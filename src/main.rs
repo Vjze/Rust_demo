@@ -5,7 +5,6 @@ use tool_slint::{*, get_result,datetime};
 fn main() {
     let app = App::new().unwrap();
     let cargo_worker = get_result::CargoWorker::new(&app);
-    // #[cfg(feature = "chrono")]
     let _timer = datetime::setup(&app);
 
     app.global::<InfosData>().on_query({

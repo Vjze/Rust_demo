@@ -1,4 +1,4 @@
-import { StyleMetrics,Switch } from "std-widgets.slint";
+import { StyleMetrics,Switch , GroupBox} from "std-widgets.slint";
 import { DateTime } from "pages/datetime.slint";
 component SideBarItem inherits Rectangle {
     callback clicked <=> touch.clicked;
@@ -107,7 +107,7 @@ export component SideBar inherits Rectangle {
             vertical-alignment: center;
             height: 45px;
         }
-
+       
         navigation := VerticalLayout {
             alignment: start;
             vertical-stretch: 0;
@@ -119,7 +119,7 @@ export component SideBar inherits Rectangle {
             }
         }
 
-
+    
         
         
     }
