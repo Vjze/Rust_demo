@@ -1,5 +1,4 @@
-import { Button, GroupBox,  ComboBox, CheckBox, LineEdit,ListView} from "std-widgets.slint";
-
+import {GroupBox,ComboBox, CheckBox, LineEdit,ListView} from "std-widgets.slint";
 export struct Action  {
     type: string,
     text: string,
@@ -38,10 +37,30 @@ export global InfosData {
     in-out property <string> text;
 
 }
+component Button inherits Rectangle {
+    in-out property text <=> txt.text;
+    callback clicked <=> touch.clicked;
+    border-radius: root.height * 1.05;
+    // border-width: 15px;
+    border-color: root.background.darker(25%);
+    background: touch.pressed ? #6b8282 : touch.has-hover ? #535b97 :  #456;
+    height: txt.preferred-height * 3.5;
+    min-width: txt.preferred-width + 35px;
+    txt := Text {
+        x: (parent.width - self.width)/2 + (touch.pressed ? 15px : 0);
+        y: (parent.height - self.height)/2 + (touch.pressed ? 18px : 0);
+        color: touch.pressed ? #fff : #eee;
+        font-size: 13px;
+    }
+    touch := TouchArea { }
+}
+
+
 
 export component QueryPage inherits GridLayout {
    
     VerticalLayout {
+        spacing: 15px;
         HorizontalLayout {
             height: 50px;
             alignment: start;
@@ -53,35 +72,43 @@ export component QueryPage inherits GridLayout {
                 }
                 horizontal-alignment:left;
                 width: 350px;
+                font-size: 15px;
+
                 
                 
             }
             
             Button {
-                text:@tr("X") ;
+                text:@tr("  X  ") ;
                 clicked =>{
                     text-edit.text = ""
                 }
+                
             }
             
             mode_cb := ComboBox {
                 current_index: 0;
                 model: [@tr("SN"), @tr("Box"),@tr("Carton"), @tr("Worker_ID"), @tr("Date")];
+                
 
             }
             query := Button {
-                text: @tr("查询");
+                text: @tr(" 查询 ");
                 clicked => {
                     InfosData.query({
                     type:mode-cb.current-value,
                     text:text-edit.text
-
                     })
                 }
+                
             }
         
-            text := GroupBox {
-                title : @tr("数量：{}",InfosData.text);
+            text := Rectangle {
+                Text{
+                   text : @tr("数量：{}",InfosData.text);
+                   font-size: 16px;
+                }
+                 
                 
             }
         
@@ -89,7 +116,6 @@ export component QueryPage inherits GridLayout {
     
     // Rectangle{
         if mode-cb.current-index == 0 :VerticalLayout{
-            // spacing: 5px;
         HorizontalLayout {
             Text {
                 text: @tr("SN");
@@ -221,36 +247,51 @@ export component QueryPage inherits GridLayout {
                                 Text {
                                     text: da.text;
                                     horizontal-alignment: center;
+                                    font-size: 12px;
                                     
                                 }
                             
                     }
+                    
         ListView {
             height: 800px;
+            
             for data in InfosData.datas_box: HorizontalLayout {
                     Text {
                         text: {data.box-sn};
                         horizontal-alignment: center;
+                        font-size: 12px;
+                        height: 25px;
                     }
                     Text {
                         text: {data.sn};
                         horizontal-alignment: center;
+                        font-size: 12px;
+                        height: 25px;
                     }
                     Text {
                         text: {data.pn};
                         horizontal-alignment: center;
+                        font-size: 12px;
+                        height: 25px;
                     }
                     Text {
                         text: {data.order};
                         horizontal-alignment: center;
+                        font-size: 12px;
+                        height: 25px;
                     }
                     Text {
                         text: {data.workerid};
                         horizontal-alignment: center;
+                        font-size: 12px;
+                        height: 25px;
                     }
                     Text {
                         text: {data.date};
                         horizontal-alignment: center;
+                        font-size: 12px;
+                        height: 25px;
                     }
                 }
             }

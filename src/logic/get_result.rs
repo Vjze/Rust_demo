@@ -1,4 +1,4 @@
-use crate::generated_code::{App,Action,Infos_Box,Infos_Sn,InfosData};
+use crate::generated_code::{App,Action,Infos_Box,Infos_Sn,InfosData,Example};
 use crate::logic::sql::box_work;
 use futures::future::{Fuse, FutureExt};
 use slint::{ComponentHandle, Model, ModelRc, VecModel};
@@ -11,6 +11,7 @@ use super::sql::sn_work;
 pub enum QueryMessage {
     Action { action: Action },
     Quit,
+    ShowDialog(String)
 }
 
 pub struct CargoWorker {
@@ -68,6 +69,7 @@ async fn query_worker_loop(
                 run_cargo_future.set(run_query(action,handle.clone()).fuse())
             }
             QueryMessage::Quit => return Ok(()),
+            QueryMessage::ShowDialog(_) => todo!(),
         }
     }
 }
@@ -98,6 +100,6 @@ async fn run_query(action: Action,handle: slint::Weak<App>) -> tokio::io::Result
             })
             .unwrap();
         }
-
+    
     Ok(())
 }
