@@ -53,10 +53,21 @@ export component QueryPage inherits Rectangle {
                 placeholder-text : @tr("输入条码....");
                 accepted => {
                     query.clicked();
+                    
                 }
                 // theme:Themes.Warning;
                 // clearable:true;
 
+            }
+
+            text-edit-clean := SURButton{
+                y:10px;
+                height: 30px;
+                content: "";
+                icon: @image-url("../../../../SurrealismUI-main/icons/clear.svg");
+                clicked => {
+                    text-edit.text = ""
+                }
             }
             
             mode_cb := ComboBox {
@@ -73,6 +84,7 @@ export component QueryPage inherits Rectangle {
                 y:10px;
                 width: 70px;
                 height: 32px;
+                icon: @image-url("../../../../SurrealismUI-main/icons/search.svg");
                 content: @tr(" 查询 ");
                 clicked => {
                     InfosData.query({
@@ -80,7 +92,7 @@ export component QueryPage inherits Rectangle {
                     text:text-edit.text
                     })
                 }
-                icon: @image-url("../../../../SurrealismUI-main/icons/qingniao-clue.svg");
+                
                 font-size: 14px;
                 font-weight: 650;
                 letter-spacing: 2px;
