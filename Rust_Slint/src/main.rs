@@ -20,7 +20,6 @@ fn main() {
             }
         }
     });
-
     app.run().unwrap();
     cargo_worker.join().unwrap();
 }
