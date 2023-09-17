@@ -47,14 +47,15 @@ export component QueryPage inherits Rectangle {
             height: 50px;
             alignment: start;
             spacing :20px;
-            text-edit :=SURInput {
+            text-edit :=LineEdit {
                 y:10px;
-                placeholder : @tr("输入条码....");
+                height: 30px;
+                placeholder-text : @tr("输入条码....");
                 accepted => {
                     query.clicked();
                 }
                 // theme:Themes.Warning;
-                clearable:true;
+                // clearable:true;
 
             }
             
@@ -76,7 +77,7 @@ export component QueryPage inherits Rectangle {
                 clicked => {
                     InfosData.query({
                     type:mode-cb.current-value,
-                    text:text-edit.content
+                    text:text-edit.text
                     })
                 }
                 icon: @image-url("../../../../SurrealismUI-main/icons/qingniao-clue.svg");
