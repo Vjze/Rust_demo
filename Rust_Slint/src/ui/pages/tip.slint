@@ -1,0 +1,22 @@
+import {SURTip,SURButton } from "../../../../../SurrealismUI-main/index.slint";
+import {Themes} from "../../../../../SurrealismUI-main/themes/index.slint";
+
+
+component Tip inherits Window {
+  height: 400px;
+  width: 400px;
+  callback show_tip;
+  show_tip => { tip.open(); }
+  tip := SURTip{
+    height:inner.height;
+    theme: Dark;
+    content:"this is a \ntip window";
+    inner:=SURButton { 
+      content: "click";
+      clicked => {
+        parent.clicked();
+      }
+    }
+  }
+ 
+}
