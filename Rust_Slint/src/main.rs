@@ -1,6 +1,6 @@
 #![windows_subsystem = "windows"]
 
-use tool_slint::{*, get_result,datetime};
+use tool_slint::{datetime, get_result, *};
 
 fn main() {
     let app = App::new().unwrap();
@@ -13,20 +13,14 @@ fn main() {
         move |action| {
             if action.text.len() == 0 {
                 window.unwrap().invoke_show_confirm_popup();
-            }else {
+            } else {
                 cargo_channel
-                .send(get_result::QueryMessage::Action {
-                    action,
-                })
-                .unwrap()
+                    .send(get_result::QueryMessage::Action { action })
+                    .unwrap()
             }
-            
         }
     });
 
-
-    
-    
     app.run().unwrap();
     cargo_worker.join().unwrap();
 }

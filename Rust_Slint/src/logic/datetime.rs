@@ -1,19 +1,23 @@
 // Copyright © SixtyFPS GmbH <info@slint.dev>
 // SPDX-License-Identifier: MIT
 
-use crate::generated_code::{App,DateTimeAdapter};
+use crate::generated_code::{App, DateTimeAdapter};
 use chrono::prelude::*;
 use slint::*;
 
 pub fn setup(window: &App) -> Timer {
     let update_timer = Timer::default();
-    update_timer.start(slint::TimerMode::Repeated, std::time::Duration::from_millis(300), {
-        let weak_window = window.as_weak();
+    update_timer.start(
+        slint::TimerMode::Repeated,
+        std::time::Duration::from_millis(300),
+        {
+            let weak_window = window.as_weak();
 
-        move || {
-            update(&weak_window.unwrap().global::<DateTimeAdapter>());
-        }
-    });
+            move || {
+                update(&weak_window.unwrap().global::<DateTimeAdapter>());
+            }
+        },
+    );
 
     update_timer
 }

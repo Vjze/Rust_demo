@@ -25,6 +25,7 @@ component SideBarItem inherits Rectangle {
             vertical-alignment: center;
             horizontal-alignment: center;
             font-size: 15px;
+            font-weight: 650;
          }
     }
 
@@ -55,12 +56,9 @@ export component SideBar inherits Rectangle {
     in property<string> title <=> label.text;
     out property<int> current-focused: fs.has-focus ? fs.focused-tab : -1; // The currently focused tab
     width: 180px;
-
     forward-focus: fs;
-
     accessible-role: tab;
     accessible-delegate-focus: root.current-focused >= 0 ? root.current-focused : root.current-item;
-
     Rectangle {
         background: StyleMetrics.window-background.darker(0.2);
 
@@ -96,7 +94,7 @@ export component SideBar inherits Rectangle {
     }
 
     VerticalLayout {
-        padding-top: StyleMetrics.layout-padding;
+        // padding-top: StyleMetrics.layout-padding;
         padding-bottom: StyleMetrics.layout-padding;
         spacing: StyleMetrics.layout-spacing;
         alignment: start;
@@ -106,6 +104,7 @@ export component SideBar inherits Rectangle {
             horizontal-alignment: center;
             vertical-alignment: center;
             height: 45px;
+            font-weight: 650;
         }
        
         navigation := VerticalLayout {
@@ -126,6 +125,6 @@ export component SideBar inherits Rectangle {
     VerticalLayout {
        
         DateTime { }
-        padding-bottom: 50px;
+        // padding-bottom: 5px;
     }
 }

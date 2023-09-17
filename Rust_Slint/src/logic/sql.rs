@@ -1,11 +1,10 @@
-
-use crate::logic::util::{client,sn_client};
-use crate::generated_code::{Infos_Box,Infos_Sn};
+use crate::generated_code::{Infos_Box, Infos_Sn};
+use crate::logic::util::{client, sn_client};
 // use ::chrono::Local;
 use tiberius::time::chrono;
 // use uuid::Uuid;
 
-pub async fn sn_work(s: String) -> (Vec<Infos_Sn>,usize) {
+pub async fn sn_work(s: String) -> (Vec<Infos_Sn>, usize) {
     let mut row_data = Vec::new();
     let mut client = sn_client().await;
     let query_ty = format!("where SN = '{}'", s);
@@ -27,77 +26,29 @@ pub async fn sn_work(s: String) -> (Vec<Infos_Sn>,usize) {
     for i in 0..rowsets.len() {
         let rows = rowsets.get(i).unwrap();
         for row in rows {
-            let sn = slint::format!(
-                "{}",
-                (row.get::<&str, _>(0).unwrap_or("?"))
-            );
-            let workid = slint::format!(
-                "{}",
-                (row.get::<&str, _>(1).unwrap_or("?"))
-            );
-            let pn = slint::format!(
-                "{}",
-                (row.get::<&str, _>(2).unwrap_or("?"))
-            );
-            let result = slint::format!(
-                "{}",
-                (row.get::<&str, _>(3).unwrap_or("?"))
-            );
-            let ith = slint::format!(
-                "{}",
-                (row.get::<&str, _>(4).unwrap_or("?"))
-            );
-            let pf = slint::format!(
-                "{}",
-                (row.get::<&str, _>(5).unwrap_or("?"))
-            );
-            let vop = slint::format!(
-                "{}",
-                (row.get::<&str, _>(6).unwrap_or("?"))
-            );
-            let im = slint::format!(
-                "{}",
-                (row.get::<&str, _>(7).unwrap_or("?"))
-            );
-            let rs = slint::format!(
-                "{}",
-                (row.get::<&str, _>(8).unwrap_or("?"))
-            );
-            let sen = slint::format!(
-                "{}",
-                (row.get::<&str, _>(9).unwrap_or("?"))
-            );
-            let res = slint::format!(
-                "{}",
-                (row.get::<&str, _>(10).unwrap_or("?"))
-            );
-            let icc = slint::format!(
-                "{}",
-                (row.get::<&str, _>(11).unwrap_or("?"))
-            );
-            let idark = slint::format!(
-                "{}",
-                (row.get::<&str, _>(12).unwrap_or("?"))
-            );
-            let vbr = slint::format!(
-                "{}",
-                (row.get::<&str, _>(13).unwrap_or("?"))
-            );
-            let ixtalk = slint::format!(
-                "{}",
-                (row.get::<&str, _>(14).unwrap_or("?"))
-            );
-            let kink = slint::format!(
-                "{}",
-                (row.get::<&str, _>(15).unwrap_or("?"))
-            );
+            let sn = slint::format!("{}", (row.get::<&str, _>(0).unwrap_or("?")));
+            let workid = slint::format!("{}", (row.get::<&str, _>(1).unwrap_or("?")));
+            let pn = slint::format!("{}", (row.get::<&str, _>(2).unwrap_or("?")));
+            let result = slint::format!("{}", (row.get::<&str, _>(3).unwrap_or("?")));
+            let ith = slint::format!("{}", (row.get::<&str, _>(4).unwrap_or("?")));
+            let pf = slint::format!("{}", (row.get::<&str, _>(5).unwrap_or("?")));
+            let vop = slint::format!("{}", (row.get::<&str, _>(6).unwrap_or("?")));
+            let im = slint::format!("{}", (row.get::<&str, _>(7).unwrap_or("?")));
+            let rs = slint::format!("{}", (row.get::<&str, _>(8).unwrap_or("?")));
+            let sen = slint::format!("{}", (row.get::<&str, _>(9).unwrap_or("?")));
+            let res = slint::format!("{}", (row.get::<&str, _>(10).unwrap_or("?")));
+            let icc = slint::format!("{}", (row.get::<&str, _>(11).unwrap_or("?")));
+            let idark = slint::format!("{}", (row.get::<&str, _>(12).unwrap_or("?")));
+            let vbr = slint::format!("{}", (row.get::<&str, _>(13).unwrap_or("?")));
+            let ixtalk = slint::format!("{}", (row.get::<&str, _>(14).unwrap_or("?")));
+            let kink = slint::format!("{}", (row.get::<&str, _>(15).unwrap_or("?")));
             let datatime = slint::format!(
                 "{}",
                 (row.get::<chrono::NaiveDateTime, _>(16)
                     .unwrap()
                     .format("%Y/%m/%d %H:%M:%S"))
             );
-            row_data.push(Infos_Sn{
+            row_data.push(Infos_Sn {
                 sn,
                 productBill: workid,
                 testType: pn,
@@ -114,13 +65,12 @@ pub async fn sn_work(s: String) -> (Vec<Infos_Sn>,usize) {
                 vbr,
                 ixtalk,
                 kink,
-                testdate:datatime,
+                testdate: datatime,
             });
-            
         }
     }
     let m = row_data.len();
-    (row_data,m)
+    (row_data, m)
 }
 // // pub async fn box_none_work(d1: String, d2: String) -> (Vec<Vec<String>>, usize) {
 // //     let mut client = client().await;
@@ -159,54 +109,52 @@ pub async fn sn_work(s: String) -> (Vec<Infos_Sn>,usize) {
 // //     (rv, quantity)
 // // }
 
-
-
-pub async fn box_work(s:String) -> (Vec<Infos_Box>,usize) {
-    let  mut row_data = Vec::new();
+pub async fn box_work(s: String) -> (Vec<Infos_Box>, usize) {
+    let mut row_data = Vec::new();
     let mut client = client().await;
-        let query_ty = format!(
-            "where Pack_no = '{}' ORDER BY [CreateTime] DESC OFFSET 0 ROWS ",
-            s
-        );
-        let testtype_none = "Pack_no,Sn,PN,WorkOrder,Creator,CreateTime";
-        let stream = client
-            .query(
-                format!(
-                    "select {0} from MaterialPackSn {1} ",
-                    testtype_none, query_ty
-                ),
-                &[&1i32],
-            )
-            .await
-            .unwrap();
-        let rowsets = stream.into_results().await.unwrap();
-        for i in 0..rowsets.len() {
-            let rows = rowsets.get(i).unwrap();
-            for row in rows {
-                let box_no = slint::format!("{}", (row.get::<&str, _>(0).unwrap_or("?")));
-                let sn = slint::format!("{}", (row.get::<&str, _>(1).unwrap_or("?")));
-                let pn = slint::format!("{}", (row.get::<&str, _>(2).unwrap_or("?")));
-                let order = slint::format!("{}", (row.get::<&str, _>(3).unwrap_or("?")));
-                let worderid = slint::format!("{}", (row.get::<&str, _>(4).unwrap_or("?")));
-                let datatime = slint::format!(
-                    "{}",
-                    (row.get::<chrono::NaiveDateTime, _>(5)
-                        .unwrap()
-                        .format("%Y/%m/%d %H:%M:%S"))
-                );
-                row_data.push(Infos_Box {
-                    box_sn: box_no.clone(),
-                    sn:sn.clone(),
-                    pn:pn.clone(),
-                    order:order.clone(),
-                    workerid: worderid.clone(),
-                    date: datatime.clone(),
-                });
-            }
+    let query_ty = format!(
+        "where Pack_no = '{}' ORDER BY [CreateTime] DESC OFFSET 0 ROWS ",
+        s
+    );
+    let testtype_none = "Pack_no,Sn,PN,WorkOrder,Creator,CreateTime";
+    let stream = client
+        .query(
+            format!(
+                "select {0} from MaterialPackSn {1} ",
+                testtype_none, query_ty
+            ),
+            &[&1i32],
+        )
+        .await
+        .unwrap();
+    let rowsets = stream.into_results().await.unwrap();
+    for i in 0..rowsets.len() {
+        let rows = rowsets.get(i).unwrap();
+        for row in rows {
+            let box_no = slint::format!("{}", (row.get::<&str, _>(0).unwrap_or("?")));
+            let sn = slint::format!("{}", (row.get::<&str, _>(1).unwrap_or("?")));
+            let pn = slint::format!("{}", (row.get::<&str, _>(2).unwrap_or("?")));
+            let order = slint::format!("{}", (row.get::<&str, _>(3).unwrap_or("?")));
+            let worderid = slint::format!("{}", (row.get::<&str, _>(4).unwrap_or("?")));
+            let datatime = slint::format!(
+                "{}",
+                (row.get::<chrono::NaiveDateTime, _>(5)
+                    .unwrap()
+                    .format("%Y/%m/%d %H:%M:%S"))
+            );
+            row_data.push(Infos_Box {
+                box_sn: box_no.clone(),
+                sn: sn.clone(),
+                pn: pn.clone(),
+                order: order.clone(),
+                workerid: worderid.clone(),
+                date: datatime.clone(),
+            });
         }
+    }
 
     let quantity = row_data.len();
-    (row_data,quantity)
+    (row_data, quantity)
 }
 
 // pub async fn box_work(s: String) -> Rc<VecModel<slint::ModelRc<StandardListViewItem>>> {

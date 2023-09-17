@@ -7,31 +7,33 @@ export component DateTime {
     in property <string> date <=> DateTimeAdapter.date;
     in property <string> time <=> DateTimeAdapter.time;
 
-    min-height: 50px;
+    min-height: 20px;
     vertical-stretch: 0;
-
     VerticalLayout {
-        padding: 20px;
-        spacing: 5px;   
+        
+        padding: 25px;
             // horizontal-stretch: 1;
 
             Text {
                 text: date;
-                font-size: 16px;
+                font-size: 15px;
                 vertical-alignment: bottom;
                 horizontal-alignment: center;
+                font-weight: 550;
+                
             }
         
 
     
         }
         VerticalLayout {
-
+            padding: 5px;
             Text {
                 vertical-alignment: bottom;
                 text: time;
                 font-size: 16px;
                 horizontal-alignment: center;
+                font-weight: 550;
             }
 
             

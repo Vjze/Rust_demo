@@ -1,4 +1,7 @@
-import {GroupBox,ComboBox, CheckBox, LineEdit,ListView} from "std-widgets.slint";
+import {GroupBox,ComboBox, ListView,Button, LineEdit} from "std-widgets.slint";
+import {SURButton ,SURInput} from "../../../SurrealismUI-main/index.slint";
+import {Themes,IconSources} from "../../../SurrealismUI-main/themes/index.slint";
+
 export struct Action  {
     type: string,
     text: string,
@@ -37,76 +40,57 @@ export global InfosData {
     in-out property <string> text;
 
 }
-component Button inherits Rectangle {
-    in-out property text <=> txt.text;
-    callback clicked <=> touch.clicked;
-    border-radius: root.height * 1.05;
-    // border-width: 15px;
-    border-color: root.background.darker(25%);
-    background: touch.pressed ? #6b8282 : touch.has-hover ? #535b97 :  #456;
-    height: txt.preferred-height * 3.5;
-    min-width: txt.preferred-width + 35px;
-    txt := Text {
-        x: (parent.width - self.width)/2 + (touch.pressed ? 15px : 0);
-        y: (parent.height - self.height)/2 + (touch.pressed ? 18px : 0);
-        color: touch.pressed ? #fff : #eee;
-        font-size: 13px;
-    }
-    touch := TouchArea { }
-}
 
-
-
-export component QueryPage inherits GridLayout {
-   
+export component QueryPage inherits Rectangle {
     VerticalLayout {
         spacing: 15px;
         HorizontalLayout {
             height: 50px;
             alignment: start;
             spacing :20px;
-            text-edit :=LineEdit {
-                placeholder-text: @tr("Enter some text");
+            text-edit :=SURInput {
+                y:10px;
+                placeholder : @tr("输入条码....");
                 accepted => {
                     query.clicked();
                 }
-                horizontal-alignment:left;
-                width: 350px;
-                font-size: 15px;
+                // theme:Themes.Warning;
+                clearable:true;
 
-                
-                
-            }
-            
-            Button {
-                text:@tr("  X  ") ;
-                clicked =>{
-                    text-edit.text = ""
-                }
-                
             }
             
             mode_cb := ComboBox {
+                y:10px;
+                height: 38px;
                 current_index: 0;
                 model: [@tr("SN"), @tr("Box"),@tr("Carton"), @tr("Worker_ID"), @tr("Date")];
                 
 
             }
-            query := Button {
-                text: @tr(" 查询 ");
+        
+            query := SURButton {
+                // theme: Light;
+                y:10px;
+                width: 70px;
+                height: 32px;
+                content: @tr(" 查询 ");
                 clicked => {
                     InfosData.query({
                     type:mode-cb.current-value,
-                    text:text-edit.text
+                    text:text-edit.content
                     })
                 }
-                
+                icon: @image-url("../../../SurrealismUI-main/icons/qingniao-clue.svg");
+                font-size: 14px;
+                font-weight: 650;
+                letter-spacing: 2px;
             }
         
             text := Rectangle {
                 Text{
                    text : @tr("数量：{}",InfosData.text);
-                   font-size: 16px;
+                   font-size: 15px;
+                   font-weight: 650;
                 }
                  
                 
@@ -119,8 +103,11 @@ export component QueryPage inherits GridLayout {
         HorizontalLayout {
             Text {
                 text: @tr("SN");
-                horizontal-alignment: center;
                 width: 180px;
+                font-weight: 650;
+                horizontal-alignment: center;
+                font-size: 15px;
+                
             }
             for da in [
                 // {text: @tr("SN")},
@@ -142,14 +129,16 @@ export component QueryPage inherits GridLayout {
                 // {text: @tr("TestDate")},
             ] : Text {
                         text: da.text;
-                        horizontal-alignment: center;
-                        
+                        font-weight: 650;
+                        font-size: 15px;
                     }
                 
-            Text {
+                    Text {
                 text: @tr("TestDate");
                 horizontal-alignment: center;
                 width: 200px;
+                font-weight: 650;
+                font-size: 15px;
             }
         }
             
@@ -159,70 +148,87 @@ export component QueryPage inherits GridLayout {
                     Text {
                         text: {data.sn};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.productBill};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.testType};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.result};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.ith};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.pf};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.vop};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.im};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.rs};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.sen};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.res};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.icc};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.idark};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.vbr};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.ixtalk};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.kink};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.testdate};
                         horizontal-alignment: center;
+                        font-weight: 550;
                     }
                     
                 }
@@ -247,8 +253,8 @@ export component QueryPage inherits GridLayout {
                                 Text {
                                     text: da.text;
                                     horizontal-alignment: center;
-                                    font-size: 12px;
-                                    
+                                    font-weight: 550;
+                                    font-size: 15px;
                                 }
                             
                     }

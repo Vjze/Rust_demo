@@ -1,11 +1,9 @@
-
-use tiberius::{Config, AuthMethod, Client};
+use tiberius::{AuthMethod, Client, Config};
 use tokio::net::TcpStream;
-use tokio_util::compat::{TokioAsyncWriteCompatExt, Compat};
+use tokio_util::compat::{Compat, TokioAsyncWriteCompatExt};
 // use async_std::net::TcpStream;
 
-
-pub async fn client()->Client<Compat<TcpStream>>{
+pub async fn client() -> Client<Compat<TcpStream>> {
     let mut config = Config::new();
     config.host("192.168.2.189");
     config.port(1433);
@@ -19,8 +17,6 @@ pub async fn client()->Client<Compat<TcpStream>>{
         .unwrap();
     client
 }
-
-
 
 // pub async fn client_1()->Client<Compat<TcpStream>>{
 //     let mut config = Config::new();
@@ -52,7 +48,7 @@ pub async fn client()->Client<Compat<TcpStream>>{
 //     client
 // }
 
-pub async fn sn_client()->Client<Compat<TcpStream>>{
+pub async fn sn_client() -> Client<Compat<TcpStream>> {
     let mut config = Config::new();
     config.host("192.168.2.189");
     config.port(1433);

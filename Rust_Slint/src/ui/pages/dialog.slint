@@ -1,14 +1,15 @@
 import { StandardButton } from "std-widgets.slint";
-
 export component Dia inherits Rectangle {
   callback show_confirm_popup;
   show_confirm_popup => { confirm_popup.show(); }
   confirm_popup := PopupWindow {
     x: 760px;
     y: 385px;
+    
     width: min(confirm_popup_layout.preferred-width, root.width - 40px);
     Rectangle {
-        background: root.background;
+        // background: root.background;
+        background: #535353;
         border-color: confirm_popup_text.color;
         // border-width: 1px;
     }

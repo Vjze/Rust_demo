@@ -9,7 +9,7 @@ path = "src/main.rs"
 name = "slint"
 
 [dependencies]
-slint = "1.1.1"
+slint = "1.2.0"
 tiberius={version="0.12.2",features = ["chrono","rustls","tds73",],default-features = false}
 tokio = { version = "1.32", features = ["full"] }
 tokio-util = { version = "0.7.8", features=["compat"]}
@@ -17,4 +17,7 @@ chrono =  "0.4"
 futures = "0.3"
 
 [build-dependencies]
-slint-build = "1.1.1"
+slint-build = "1.2.0"
+
+[profile.release]
+lto = true
