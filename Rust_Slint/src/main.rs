@@ -12,8 +12,7 @@ fn main() {
         let cargo_channel = cargo_worker.channel.clone();
         move |action| {
             if action.text.len() == 0 {
-                // window.unwrap().invoke_show_confirm_popup();
-                window.unwrap().invoke_show_tip();
+                window.unwrap().invoke_show_confirm_popup();
             } else {
                 cargo_channel
                     .send(get_result::QueryMessage::Action { action })

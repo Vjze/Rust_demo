@@ -25,10 +25,10 @@ export component Tip inherits Rectangle{
   in property <Themes> theme :Light;
   in property <string> content : "default tips";
   public function open() {
-     tip.visible = true; 
+     tip.visible = false; 
   }
   public function close() {
-    tip.visible = false;
+    tip.visible = true;
   }
   callback clicked();
   clicked => {

@@ -60,7 +60,7 @@ export component QueryPage inherits Rectangle {
             
             mode_cb := ComboBox {
                 y:10px;
-                height: 38px;
+                height: 32px;
                 current_index: 0;
                 model: [@tr("SN"), @tr("Box"),@tr("Carton"), @tr("Worker_ID"), @tr("Date")];
                 
@@ -265,38 +265,44 @@ export component QueryPage inherits Rectangle {
                     Text {
                         text: {data.box-sn};
                         horizontal-alignment: center;
-                        font-size: 12px;
+                        font-size: 13px;
                         height: 25px;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.sn};
                         horizontal-alignment: center;
-                        font-size: 12px;
+                        font-size: 13px;
                         height: 25px;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.pn};
                         horizontal-alignment: center;
-                        font-size: 12px;
+                        font-size: 13px;
                         height: 25px;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.order};
                         horizontal-alignment: center;
-                        font-size: 12px;
+                        font-size: 13px;
                         height: 25px;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.workerid};
                         horizontal-alignment: center;
-                        font-size: 12px;
+                        font-size: 13px;
                         height: 25px;
+                        font-weight: 550;
                     }
                     Text {
                         text: {data.date};
                         horizontal-alignment: center;
-                        font-size: 12px;
+                        font-size: 13px;
                         height: 25px;
+                        font-weight: 550;
                     }
                 }
             }

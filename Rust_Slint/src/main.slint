@@ -1,13 +1,12 @@
 import { StyleMetrics } from "std-widgets.slint";
 import { SideBar} from "ui/side_bar.slint";
-import { QueryPage,Action,Infos_Box,Infos_Sn,InfosData,DateTimeAdapter,Dia,Tip } from "ui/pages/query.slint";
-export { QueryPage,Action,Infos_Box,Infos_Sn,InfosData,DateTimeAdapter,Dia,Tip}
+import { QueryPage,Action,Infos_Box,Infos_Sn,InfosData,DateTimeAdapter,Dia} from "ui/pages/query.slint";
+export { QueryPage,Action,Infos_Box,Infos_Sn,InfosData,DateTimeAdapter,Dia}
 export component App inherits Window {
     width: 1240px;
     height: 760px;
     icon: @image-url("ui/reso/logo.png");
-    // callback show_confirm_popup <=> dia.show_confirm_popup;
-    callback show_tip <=> tip.show_tip;
+    callback show_confirm_popup <=> dia.show_confirm_popup;
     background: StyleMetrics.window-background;
     title: @tr("Slint_Tools");
     HorizontalLayout {
@@ -19,5 +18,4 @@ export component App inherits Window {
         if(side-bar.current-item == 0) : QueryPage {}
     }
     dia := Dia { }
-    tip := Tip { }
 }
