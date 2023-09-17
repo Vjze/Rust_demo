@@ -12,3 +12,4 @@ keywords = ["slint-ui", "slint","ui-components"]
 
 [dependencies]
 slint = "1.2.0"
+
