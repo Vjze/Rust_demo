@@ -5,8 +5,8 @@ export component Dia inherits Rectangle {
   show_confirm_popup => { confirm_popup.open(); }
   confirm_popup:=SURDialog {
     dialog-title: "提示";
-    dialog-details : "输入框不能为空，请输入要查询的数据再进行查询!";
-    confirm-btn-theme: Success;
+    dialog-details : "输入框不能为空，请输入SN或者箱号、盒号再进行查询！";
+    confirm-btn-theme: Warning;
     dialog-width:80%;
     dialog-height:50%;
     // do after confirm btn clicked
