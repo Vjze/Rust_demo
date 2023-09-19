@@ -1,11 +1,11 @@
-<img src="https://img.shields.io/badge/SurrealismUI-0.1.3-orange?style=flat-square&logo=rust&logoColor=%23fff&labelColor=%23DEA584&color=%23DEA584">  <img src="https://img.shields.io/badge/License-MIT-orange?style=flat-square&logoColor=%23fff&labelColor=%2323B898&color=%2323B898">
+<img src="https://img.shields.io/badge/SurrealismUI-0.1.4-orange?style=flat-square&logo=rust&logoColor=%23fff&labelColor=%23DEA584&color=%23DEA584">  <img src="https://img.shields.io/badge/License-MIT-orange?style=flat-square&logoColor=%23fff&labelColor=%2323B898&color=%2323B898">
 
 # SurrealismUI
 
 - author：syf20020816@outlook.com
 - createDate：20230908
-- updateDate：20230916
-- version：0.1.3
+- updateDate：20230919
+- version：0.1.4
 - email：syf20020816@outlook.com
 
 <img src="https://github.com/syf20020816/SurrealismUI/blob/main/README/imgs/logo.png">
@@ -21,11 +21,15 @@ SurrealismUI is a third-party component library built entirely using Slint
 
 ### Updates
 
+- V0.1.4
+  - add `SURTip`
+  - add `SURLoading`
+  - add `SURDialog`
+
 - V0.1.3
   - add `SURBadge`
   - add `Progress`
   - add `Persona`
-
 - V0.1.2
   - rebuild components (have `SURIcon`)
   - rebuild `SURIcon`
@@ -33,13 +37,11 @@ SurrealismUI is a third-party component library built entirely using Slint
   - solve memery overflow issue
   - use minimize import principle (remove inner loop to judge component show!)❗
   - test use Rust✅
-
 - V0.1.1
   - add `SURRadio`
   - add `SURDivider`
   - add `SURCollection`
   - add `SURPopup`
-
 - V0.1.0
   - Adopting Fluent2's component design style
   - Multiple default methods are provided for consumers to call (see index.slint which on the outermost side)
@@ -60,6 +62,46 @@ Built in 7 theme colors in SurrealismUI
 - light
 
 ### themes-color
+
+```
+			  default
+————————————————————————————————————
+|  logic control layer (Rust|C++)  |
+————————————————————————————————————
+				⇕
+————————————————————————————————————
+|    UI layer (write components)   |
+————————————————————————————————————
+
+		   SurrealismUI
+————————————————————————————————————
+|  logic control layer (Rust|C++)  |
+————————————————————————————————————
+				⇕
+————————————————————————————————————
+|      UI Styles Wrapper layer     |   <-- What SurrealismUI do , see ①
+————————————————————————————————————
+|   UI layer (write components)    |
+————————————————————————————————————
+
+①：define a lot replaceable theme styles and binding styles use theme property , can be customized in slint file or logic control layer , means: all system components are wrapped (Customizing themes in third-party component libraries is very affordable as it acts on the UI layer. SLINT is like an integration of HTML and CSS, so I use this way)(By binding global singleton variables to styles, any component that uses variables can change styles simultaneously)
+
+				System support (like iced)
+————————————————————————————————————      ————————————————
+|           logic control          | -->  | Theme::Light |
+————————————————————————————————————      ————————————————
+|             UI layer             |     		  ↓
+———————————————————————————————————— 	    |————————————|
+						 ↑			     ↓            ↓
+				import	  ← Light_Theme Styles   Dark_Theme Styles
+
+## Diff
+Slint differs from other GUI frameworks in that the UI layer is completed through. slint, which I believe is good and brings many advantages (compatibility with different platforms, instant preview, maintainability, parallel development, etc.). But this also leads to SLIT being unable to easily customize the theme of the component. Theme customization and switching are dynamic to static processes, which require a lot of logical processing, and this is also same as (HTML+CSS+js | ts)
+## Slint be careful
+Slint's work on topic definition will simultaneously affect the built-in components currently provided and other languages' API. Although this feature may seem simple, it may bring significant risks, which I believe need to be weighed and considered. Is this necessary? Because for third-party component libraries, although the workload of helping users define themes is large, it is not complex. As the author of SurrealismUI, it is evident that we have successfully implemented the definition of themes in static slint language and can be modified at the logical level. Users customize themes through static file overwriting.
+```
+
+
 
 #### primary
 
@@ -1191,10 +1233,11 @@ And users will not be able to use the pop-up layer to cover the components under
 
 #### functions
 
-#### callbacks
+- `public function open()` : open the popup
 
-* `callback open()` : open the popup
-* `callback close()` : close the popup
+- `public function close()` : close the popup
+
+#### callbacks
 
 #### example
 
@@ -1595,4 +1638,143 @@ component TestWindow inherits Window {
 }
 ```
 
-![image-20230916101547495](E:\Rust\try\surrealism-ui\README\imgs\image-20230916101547495.png)
+![image-20230916101547495](https://github.com/syf20020816/SurrealismUI/blob/main/README/imgs/image-20230916101547495.png)
+
+### SURLoading (some error in animation)
+
+This is a loading component that you can embed anywhere you want to add a loading animation (now animation have some error)
+
+#### properties
+
+* `in-out property <bool> is-show` : the popup layer is show or not
+* `in property <Themes> theme` : Surrealism Themes
+* `in property <image> loading-icon `: loading icon
+* `in property <duration> duration `: animation duration
+* `in property <bool> an` : open animation or not (error : https://github.com/slint-ui/slint/issues/3494)
+* `in property <string> content` : loading content
+
+#### functions
+
+#### callbacks
+
+* `callback open() `: open the loading
+* `callback close() `: close the loading
+
+#### example
+
+```
+import {SURLoading,SURButton,SURCard} from "../../index.slint";
+
+export component TestLoading inherits Window {
+    height: 600px;
+    width: 400px;
+    SURButton {
+      y: 100px;
+      content: "show";
+      clicked => {
+        p.open();
+      }
+    }
+    SURButton {
+      y: 160px;
+      content: "close";
+      clicked => {
+        p.close();
+      }
+    }
+    SURCard{
+      y: 260px;
+      clip: true;
+      card-height: 260px;
+      card-width: 180px;
+      p:=SURLoading { }
+    }
+}
+```
+
+![image-20230918220357041](https://github.com/syf20020816/SurrealismUI/blob/main/README/imgs/image-20230918220357041.png)
+
+### SURDialog
+Dialogs are used to confirm messages or events and display content
+#### properties
+- `in property <string> dialog-title` : dialog title;
+- `in property <length> dialog-title-size` : dialog title font size;
+- `in property <string> dialog-details` : content information in the dialog box;
+- `in property <Themes> cancel-btn-theme` : cancel button theme;
+- `in property <Themes> confirm-btn-theme` : confirm button theme;
+- `in property <string> cancel-btn-content` : cancel button content;
+- `in property <string> confirm-btn-content` : confirm button content;
+- `in-out property <bool> is-show` : show dialog or not;
+- `in property <Themes> theme` : Surrealism Themes
+- `in property <float> dialog-height` : Dialog height proportion
+- `in property <float> dialog-width` :  Dialog width proportion
+#### functions
+- `public function open()` : open dialog
+- `public function close()` : close dialog
+#### callbacks
+- `callback confirm()` : run after confirm button click
+- `callback cancel()` : run after cancel button click
+
+#### example
+
+```
+import {SURDialog,SURButton,SURTable,SURTableColumn} from "../../index.slint";
+import {Themes} from "../../themes/index.slint";
+
+component TestDialog inherits Window {
+  height: 800px;
+  width: 800px;
+  background: #535353;
+ 
+  SURButton {
+    
+    content: "show";
+    clicked => {
+      p.open();
+    }
+  }
+ 
+
+  p:=SURDialog {
+    dialog-details : "";
+    confirm-btn-theme: Success;
+    dialog-width:80%;
+    dialog-height:52%;
+    // do after confirm btn clicked
+    confirm=>{
+      debug("confirm btn clicked~!")
+    }
+    SURTable {
+      // you can use this way to get height
+      // it depends on how many datas in column
+      height: tcol1.get-height();
+      width: 350px;
+      
+      tcol1:=SURTableColumn {
+        border:false;
+        theme:Themes.Primary;
+        width: 100px;
+        name:"id";
+        // row-height:60px;
+        datas: ["101","102","103"];
+      }
+      SURTableColumn {
+        theme:Themes.Primary;
+        width: 100px;
+        name:"name";
+        datas: ["Mat","Jarry","Kaven"];
+      }
+      SURTableColumn {
+        theme:Themes.Primary;
+        width: 150px;
+        name:"Operations";
+        // cheat datas
+        datas: [" "," "," "];
+        operation-enabled:true;
+      }
+    }
+  }
+}
+```
+
+![image-20230919091100568](https://github.com/syf20020816/SurrealismUI/blob/main/README/imgs/image-20230919091100568.png)
