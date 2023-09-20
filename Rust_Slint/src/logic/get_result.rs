@@ -1,10 +1,10 @@
-use crate::generated_code::{Action, App, InfosData, Infos_Box, Infos_Sn};
+use crate::generated_code::{Action, App, InfosData, Infos_Box, Infos_Sn,QueryTime};
 use crate::logic::sql::box_work;
 use futures::future::{Fuse, FutureExt};
 use slint::{ComponentHandle, Model, ModelRc, VecModel};
 use std::rc::Rc;
 use tokio::sync::mpsc::{UnboundedReceiver, UnboundedSender};
-
+use std::time::Instant;
 use super::sql::sn_work;
 
 #[derive(Debug)]
@@ -74,11 +74,13 @@ async fn query_worker_loop(
 }
 
 async fn run_query(action: Action, handle: slint::Weak<App>) -> tokio::io::Result<()> {
+    let i = Instant::now();
+    let handle_clone = handle.clone();
     if action.r#type == "SN" {
         let v = sn_work(action.text.to_string()).await;
         let table = v.0.clone();
         let nub = v.1.clone().to_string();
-        handle
+        handle_clone
             .upgrade_in_event_loop(move |ui| {
                 ui.global::<InfosData>().set_datas_sn(ModelRc::from(
                     Rc::new(VecModel::from(table)) as Rc<dyn Model<Data = Infos_Sn>>,
@@ -90,7 +92,7 @@ async fn run_query(action: Action, handle: slint::Weak<App>) -> tokio::io::Resul
         let v = box_work(action.text.to_string()).await;
         let table = v.0.clone();
         let nub = v.1.clone().to_string();
-        handle
+        handle_clone
             .upgrade_in_event_loop(move |ui| {
                 ui.global::<InfosData>().set_datas_box(ModelRc::from(
                     Rc::new(VecModel::from(table)) as Rc<dyn Model<Data = Infos_Box>>,
@@ -99,6 +101,10 @@ async fn run_query(action: Action, handle: slint::Weak<App>) -> tokio::io::Resul
             })
             .unwrap();
     }
-
+    let end = i.elapsed().as_secs_f32();
+    // handle_clone.unwrap().global::<QueryTime>().set_time(end);
+    handle_clone.upgrade_in_event_loop(move|ui|{
+        ui.global::<QueryTime>().set_time(end);
+    });
     Ok(())
 }

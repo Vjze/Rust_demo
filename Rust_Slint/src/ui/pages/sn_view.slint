@@ -1,6 +1,7 @@
 import {GroupBox,ComboBox, ListView,Button, LineEdit} from "std-widgets.slint";
 import { SURButton,SURInput } from "../../../../SurrealismUI-main/index.slint";
 import { Themes,IconSources } from "../../../../SurrealismUI-main/themes/index.slint";
+import { Time } from "bottom.slint";
 export struct Action  {
     type: string,
     text: string,
@@ -42,7 +43,7 @@ export global InfosData {
 
 export component QueryPage inherits Rectangle {
     VerticalLayout {
-        spacing: 15px;
+        // spacing: 15px;
         HorizontalLayout {
             height: 50px;
             alignment: start;
@@ -112,6 +113,8 @@ export component QueryPage inherits Rectangle {
     
     // Rectangle{
         if mode-cb.current-index == 0 :VerticalLayout{
+            alignment: start;
+            height: root.height*0.9;
         HorizontalLayout {
             Text {
                 text: @tr("SN");
@@ -155,7 +158,7 @@ export component QueryPage inherits Rectangle {
         }
             
         ListView {
-            height: 800px;
+            height: root.height;
             for data in InfosData.datas_sn: HorizontalLayout {
                     Text {
                         text: {data.sn};
@@ -245,14 +248,11 @@ export component QueryPage inherits Rectangle {
                     
                 }
             }
-                
-            
         }
-            
-        
-    
 
         if mode-cb.current-index == 1 :VerticalLayout{
+        alignment: start;
+        height: root.height*0.9;
         HorizontalLayout {
                         for da in [
                             {text: @tr("盒号")},
@@ -265,6 +265,7 @@ export component QueryPage inherits Rectangle {
                                 Text {
                                     text: da.text;
                                     horizontal-alignment: center;
+                                    vertical-alignment: center;
                                     font-weight: 550;
                                     font-size: 15px;
                                 }
@@ -272,12 +273,12 @@ export component QueryPage inherits Rectangle {
                     }
                     
         ListView {
-            height: 800px;
-            
+            height: root.height;
             for data in InfosData.datas_box: HorizontalLayout {
                     Text {
                         text: {data.box-sn};
                         horizontal-alignment: center;
+                        vertical-alignment: center;
                         font-size: 13px;
                         height: 25px;
                         font-weight: 550;
@@ -285,6 +286,7 @@ export component QueryPage inherits Rectangle {
                     Text {
                         text: {data.sn};
                         horizontal-alignment: center;
+                        vertical-alignment: center;
                         font-size: 13px;
                         height: 25px;
                         font-weight: 550;
@@ -292,6 +294,7 @@ export component QueryPage inherits Rectangle {
                     Text {
                         text: {data.pn};
                         horizontal-alignment: center;
+                        vertical-alignment: center;
                         font-size: 13px;
                         height: 25px;
                         font-weight: 550;
@@ -299,6 +302,7 @@ export component QueryPage inherits Rectangle {
                     Text {
                         text: {data.order};
                         horizontal-alignment: center;
+                        vertical-alignment: center;
                         font-size: 13px;
                         height: 25px;
                         font-weight: 550;
@@ -306,6 +310,7 @@ export component QueryPage inherits Rectangle {
                     Text {
                         text: {data.workerid};
                         horizontal-alignment: center;
+                        vertical-alignment: center;
                         font-size: 13px;
                         height: 25px;
                         font-weight: 550;
@@ -313,6 +318,7 @@ export component QueryPage inherits Rectangle {
                     Text {
                         text: {data.date};
                         horizontal-alignment: center;
+                        vertical-alignment: center;
                         font-size: 13px;
                         height: 25px;
                         font-weight: 550;
@@ -320,9 +326,12 @@ export component QueryPage inherits Rectangle {
                 }
             }
         }
+        HorizontalLayout {
+            vertical-stretch:1;
+            Time {}
+        }
+        
     }
-    
-
 }
     // }
     
