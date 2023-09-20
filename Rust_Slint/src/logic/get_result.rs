@@ -103,7 +103,7 @@ async fn run_query(action: Action, handle: slint::Weak<App>) -> tokio::io::Resul
     }
     let end = i.elapsed().as_secs_f32();
     // handle_clone.unwrap().global::<QueryTime>().set_time(end);
-    handle_clone.upgrade_in_event_loop(move|ui|{
+    let _ = handle_clone.upgrade_in_event_loop(move|ui|{
         ui.global::<QueryTime>().set_time(end);
     });
     Ok(())
