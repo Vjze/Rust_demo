@@ -8,20 +8,20 @@ pub async fn sn_work(s: String) -> (Vec<Infos_Sn>, usize) {
     let mut row_data = Vec::new();
     let mut client = sn_client().await;
     let query_ty = format!("where SN = '{}'", s);
-    let testtype = "SN,ProductBill,TestType,Result,Ith,Pf,Vop,Im,Rs,Sen,Res,ICC,Idark,Vbr,IXtalk,Kink,TestDate";
+    // let testtype = "SN,ProductBill,TestType,Result,Ith,Pf,Vop,Im,Rs,Sen,Res,ICC,Idark,Vbr,IXtalk,Kink,TestDate";
     let testtype_12 = "SN,ProductBill,TestType,Result,Ith,Po,Vf,Im,Rs,Sen,Res,ICC,Idark,Vbr,Xtalk,Kink_I,TestDate";
-    let stream  = client.query(format!("
-    SELECT {3} FROM {1}MAC_10GBOSADATA  {0} UNION all SELECT {4} FROM {2}MAC_f07959df8122  {0}
-    UNION all SELECT {4} FROM {2}MAC_00e04c686dd1  {0}  UNION all SELECT {4} FROM {2}MAC_00e04c3105fb  {0}
-    UNION all SELECT {4} FROM {2}MAC_70e400a2c0d4  {0}  UNION all SELECT {4} FROM {2}MAC_00262da5e778  {0}
-    UNION all SELECT {4} FROM {2}MAC_408d5cb2d04a  {0}  UNION all SELECT {4} FROM {2}MAC_408d5cb712a3  {0}
-    UNION all SELECT {4} FROM {2}MAC_408d5cb72176  {0}  UNION all SELECT {4} FROM {2}MAC_10634b007c4b  {0}
-    UNION all SELECT {4} FROM {2}MAC_10634b0966f0  {0}  UNION all SELECT {4} FROM {2}MAC_08626683922a  {0}
-    UNION all SELECT {4} FROM {2}MAC_c8e7d8e187a7  {0}  UNION all SELECT {4} FROM {2}MAC_f0b42937e924  {0}
-    UNION all SELECT {4} FROM {2}MAC_fcaa14afca45  {0}  UNION all SELECT {4} FROM {2}MAC_F07959DF968E  {0}
-    UNION all SELECT {4} FROM {2}MAC_f07959df9218  {0}  UNION all SELECT {4} FROM {2}MAC_f07959df9694  {0}
-    UNION all SELECT {4} FROM {2}MAC_f07959dfa742  {0}  UNION all SELECT {4} FROM {2}MAC_fcaa14db2983  {0}  ",
-                                       query_ty,"BOSAautotest_Data.dbo.","BOSAautotestDB.dbo.",testtype,testtype_12),&[&1i32]).await.unwrap();
+    // let stream  = client.query(format!("
+    // SELECT {3} FROM {1}MAC_10GBOSADATA  {0} UNION all SELECT {4} FROM {2}MAC_f07959df8122  {0}
+    // UNION all SELECT {4} FROM {2}MAC_00e04c686dd1  {0}  UNION all SELECT {4} FROM {2}MAC_00e04c3105fb  {0}
+    // UNION all SELECT {4} FROM {2}MAC_70e400a2c0d4  {0}  UNION all SELECT {4} FROM {2}MAC_00262da5e778  {0}
+    // UNION all SELECT {4} FROM {2}MAC_408d5cb2d04a  {0}  UNION all SELECT {4} FROM {2}MAC_408d5cb712a3  {0}
+    // UNION all SELECT {4} FROM {2}MAC_408d5cb72176  {0}  UNION all SELECT {4} FROM {2}MAC_10634b007c4b  {0}
+    // UNION all SELECT {4} FROM {2}MAC_10634b0966f0  {0}  UNION all SELECT {4} FROM {2}MAC_08626683922a  {0}
+    // UNION all SELECT {4} FROM {2}MAC_c8e7d8e187a7  {0}  UNION all SELECT {4} FROM {2}MAC_f0b42937e924  {0}
+    // UNION all SELECT {4} FROM {2}MAC_fcaa14afca45  {0}  UNION all SELECT {4} FROM {2}MAC_F07959DF968E  {0}
+    // UNION all SELECT {4} FROM {2}MAC_f07959df9218  {0}  UNION all SELECT {4} FROM {2}MAC_f07959df9694  {0}
+    // UNION all SELECT {4} FROM {2}MAC_f07959dfa742  {0}  UNION all SELECT {4} FROM {2}MAC_fcaa14db2983  {0}  ",
+    let stream  = client.query(format!("SELECT {1} FROM MAC_10GBOSADATA  {0}",query_ty,testtype_12),&[&1i32]).await.unwrap();
     let rowsets = stream.into_results().await.unwrap();
     for i in 0..rowsets.len() {
         let rows = rowsets.get(i).unwrap();
