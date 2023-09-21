@@ -11,7 +11,6 @@ use super::sql::sn_work;
 pub enum QueryMessage {
     Action { action: Action },
     Quit,
-    ShowDialog(String),
 }
 
 pub struct CargoWorker {
@@ -68,7 +67,6 @@ async fn query_worker_loop(
                 run_cargo_future.set(run_query(action, handle.clone()).fuse())
             }
             QueryMessage::Quit => return Ok(()),
-            QueryMessage::ShowDialog(_) => todo!(),
         }
     }
 }
