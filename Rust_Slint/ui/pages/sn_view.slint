@@ -1,6 +1,6 @@
 import {GroupBox,ComboBox, ListView,Button, LineEdit} from "std-widgets.slint";
-import { SURButton,SURInput } from "../../../../SurrealismUI-main/index.slint";
-import { Themes,IconSources } from "../../../../SurrealismUI-main/themes/index.slint";
+import { SURButton,SURInput } from "../../../SurrealismUI-main/index.slint";
+import { Themes,IconSources } from "../../../SurrealismUI-main/themes/index.slint";
 import { Time } from "bottom.slint";
 export struct Action  {
     type: string,
@@ -38,6 +38,7 @@ export global InfosData {
     in-out property<[Infos_Box]> datas_box;
     in-out property<[Infos_Sn]> datas_sn;
     in-out property <string> text;
+    in-out property <string> version;
 
 }
 
@@ -65,7 +66,7 @@ export component QueryPage inherits Rectangle {
                 y:10px;
                 height: 30px;
                 content: "";
-                icon: @image-url("../../../../SurrealismUI-main/icons/clear.svg");
+                icon: @image-url("../../../SurrealismUI-main/icons/clear.svg");
                 clicked => {
                     text-edit.text = ""
                 }
@@ -85,7 +86,7 @@ export component QueryPage inherits Rectangle {
                 y:10px;
                 width: 70px;
                 height: 32px;
-                icon: @image-url("../../../../SurrealismUI-main/icons/search.svg");
+                icon: @image-url("../../../SurrealismUI-main/icons/search.svg");
                 content: @tr(" 查询 ");
                 clicked => {
                     InfosData.query({
@@ -327,8 +328,21 @@ export component QueryPage inherits Rectangle {
             }
         }
         HorizontalLayout {
-            vertical-stretch:1;
-            Time {}
+            HorizontalLayout {
+                alignment: end;
+                vertical-stretch:1;
+                Time {}
+            }
+            HorizontalLayout {
+                alignment: end;
+                Text{
+                    text : @tr("Version:{}",InfosData.version);
+                    font-size: 14px;
+                    vertical-alignment: center;
+                    horizontal-alignment: center;
+                    font-weight: 550;
+                 }
+            }
         }
         
     }

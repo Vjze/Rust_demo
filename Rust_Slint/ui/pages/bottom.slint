@@ -5,12 +5,12 @@ export global QueryTime {
 
 export component Time inherits Rectangle{
     in property <float> time <=> QueryTime.time;
-    background: StyleMetrics.window-background.darker(0.2);
+    background: StyleMetrics.window-background;
     vertical-stretch: 0;
     HorizontalLayout {
         opacity: 0.85;
             Text {
-                text: "本次查询用时："+time+"秒";
+                text: "Time taken for this query："+time+"Second";
                 font-size: 14px;
                 vertical-alignment: center;
                 horizontal-alignment: center;
