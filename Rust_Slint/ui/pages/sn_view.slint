@@ -159,7 +159,7 @@ export component QueryPage inherits Rectangle {
         }
             
         ListView {
-            height: root.height;
+            height: parent.height;
             for data in InfosData.datas_sn: HorizontalLayout {
                     Text {
                         text: {data.sn};
@@ -274,7 +274,7 @@ export component QueryPage inherits Rectangle {
                     }
                     
         ListView {
-            height: root.height;
+            height: parent.height;
             for data in InfosData.datas_box: HorizontalLayout {
                     Text {
                         text: {data.box-sn};
@@ -336,7 +336,7 @@ export component QueryPage inherits Rectangle {
             HorizontalLayout {
                 alignment: end;
                 Text{
-                    text : @tr("Version:{}",InfosData.version);
+                    text : @tr("当前版本:{}",InfosData.version);
                     font-size: 14px;
                     vertical-alignment: center;
                     horizontal-alignment: center;

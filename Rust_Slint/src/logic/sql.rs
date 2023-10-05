@@ -21,7 +21,13 @@ pub async fn sn_work(s: String) -> (Vec<Infos_Sn>, usize) {
     // UNION all SELECT {4} FROM {2}MAC_fcaa14afca45  {0}  UNION all SELECT {4} FROM {2}MAC_F07959DF968E  {0}
     // UNION all SELECT {4} FROM {2}MAC_f07959df9218  {0}  UNION all SELECT {4} FROM {2}MAC_f07959df9694  {0}
     // UNION all SELECT {4} FROM {2}MAC_f07959dfa742  {0}  UNION all SELECT {4} FROM {2}MAC_fcaa14db2983  {0}  ",
-    let stream  = client.simple_query(format!("SELECT {1} FROM MAC_10GBOSADATA  {0}",query_ty,testtype_12)).await.unwrap();
+    let stream = client
+        .simple_query(format!(
+            "SELECT {1} FROM MAC_10GBOSADATA  {0}",
+            query_ty, testtype_12
+        ))
+        .await
+        .unwrap();
     let rowsets = stream.into_results().await.unwrap();
     for i in 0..rowsets.len() {
         let rows = rowsets.get(i).unwrap();
@@ -118,12 +124,10 @@ pub async fn box_work(s: String) -> (Vec<Infos_Box>, usize) {
     );
     let testtype_none = "Pack_no,Sn,PN,WorkOrder,Creator,CreateTime";
     let stream = client
-        .simple_query(
-            format!(
-                "select {0} from MaterialPackSn {1} ",
-                testtype_none, query_ty
-            )
-        )
+        .simple_query(format!(
+            "select {0} from MaterialPackSn {1} ",
+            testtype_none, query_ty
+        ))
         .await
         .unwrap();
     let rowsets = stream.into_results().await.unwrap();

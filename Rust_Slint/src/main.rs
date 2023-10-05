@@ -1,7 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tool_slint::{datetime, get_result, *};
-
+pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 fn main() {
     let app = App::new().unwrap();
     let cargo_worker = get_result::CargoWorker::new(&app);
@@ -20,6 +20,11 @@ fn main() {
             }
         }
     });
+    let window = app.as_weak();
+    window
+        .unwrap()
+        .global::<InfosData>()
+        .set_version(APP_VERSION.into());
     app.run().unwrap();
     cargo_worker.join().unwrap();
 }
